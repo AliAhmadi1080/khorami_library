@@ -23,7 +23,7 @@ inputfile.html-style %} {% block maincontent %}
         />
       </g>
     </svg>
-    <h2 class="text-center text-gray-400 text-xs leading-4">XLSX</h2>
+    <h2 class="text-center text-gray-400 text-xs leading-4">PDF</h2>
   </div>
   <div class="grid gap-2">
     <form action="" method="POST" enctype="multipart/form-data">
@@ -33,7 +33,7 @@ inputfile.html-style %} {% block maincontent %}
       {% csrf_token %}
       <div class="flex items-center justify-center">
         <label>
-          <input type="file" required hidden accept=".xlsx" name="inputfile" />
+          <input type="file" required hidden accept=".pdf" name="inputfile" />
           <div
             class="flex w-28 h-9 px-2 flex-col bg-indigo-600 rounded-full shadow text-white text-xs font-semibold leading-4 items-center justify-center cursor-pointer focus:outline-none"
           >
