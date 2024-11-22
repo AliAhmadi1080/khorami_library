@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.shortcuts import render
 from .models import Book
@@ -46,6 +47,7 @@ def handle_uploaded_file(f):
             pass
 
 
+@login_required
 def import_excle_file(request: HttpRequest):
     context = {}
     if request.method == 'POST':
@@ -55,6 +57,7 @@ def import_excle_file(request: HttpRequest):
     return render(request, 'library\inputfile.html', context)
 
 
+@login_required
 def dashbord(request: HttpRequest):
     context = {}
     return render(request, 'library\dashbord.html', context)
@@ -63,5 +66,8 @@ def dashbord(request: HttpRequest):
 def search(request: HttpRequest):
     input = request.GET.get('input', None)
     books = Book.objects.filter(name__contains=input if input else '')
-    context = {'books': books, 'count': books.count()}
+    if input is None:
+        books = books[:20]
+    context = {'books': books, 'count': Book.objects.all().count()
+               if not input else books.count()}
     return render(request, 'library\search.html', context)
