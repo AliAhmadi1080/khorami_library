@@ -34,7 +34,7 @@ def handle_uploaded_file(f):
                                 numbetsdone += 1
                     row[1] = text
                     rows_list.append(row)
-
+    Book.objects.all().delete()
     df = pd.DataFrame(rows_list[1:], columns=rows_list[0])
     df.columns = ['code', "name", 'row_number']
     for index, row in df.iterrows():
@@ -55,9 +55,13 @@ def import_excle_file(request: HttpRequest):
     return render(request, 'library\inputfile.html', context)
 
 
-def dashbord(request):
+def dashbord(request: HttpRequest):
     context = {}
     return render(request, 'library\dashbord.html', context)
 
 
-
+def search(request: HttpRequest):
+    input = request.GET.get('input', None)
+    books = Book.objects.filter(name__contains=input if input else '')
+    context = {'books': books, 'count': books.count()}
+    return render(request, 'library\search.html', context)
