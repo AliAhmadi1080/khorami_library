@@ -4,6 +4,7 @@ from django.shortcuts import render
 from .models import Book
 import pandas as pd
 import pdfplumber
+import threading
 
 
 def handle_uploaded_file(f):
@@ -13,7 +14,7 @@ def handle_uploaded_file(f):
 
     pdf_path = 'files/name.pdf'  # Replace with your PDF file path
     rows_list = []
-
+    Book.objects.all().delete()
     with pdfplumber.open(pdf_path) as pdf:
         for page in pdf.pages:
             tables = page.extract_tables()
@@ -35,7 +36,6 @@ def handle_uploaded_file(f):
                                 numbetsdone += 1
                     row[1] = text
                     rows_list.append(row)
-    Book.objects.all().delete()
     df = pd.DataFrame(rows_list[1:], columns=rows_list[0])
     df.columns = ['code', "name", 'row_number']
     for index, row in df.iterrows():
@@ -52,7 +52,8 @@ def import_excle_file(request: HttpRequest):
     context = {}
     if request.method == 'POST':
         file = request.FILES["inputfile"]
-        handle_uploaded_file(file)
+        t1 = threading.Thread(target=handle_uploaded_file, args=(file,))
+        t1.start()
         context['succses'] = True
     return render(request, 'library\inputfile.html', context)
 
