@@ -1,0 +1,58 @@
+{% extends 'adminbase.html' %} {% block createuser.html-style %} active-nav-link
+opacity-100 {% endblock createuser.html-style %} {% block title %} ایجاد عضو
+جدید {% endblock title %} {% block heading %} ایجاد عضو جدید کتابخانه {%endblock heading %} {% block maincontent %}
+
+<form class="max-w-sm" action="" method="POST">
+    {% csrf_token %}
+  <div>
+    <label
+      for="small-input"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >نام و نام خانوادگی</label
+    >
+    <input
+      type="text"
+      name="fullname"
+      id="small-input"
+      required
+      class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+  </div>
+  <div>
+    <label
+      for="small-input"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >شماره عضویت</label
+    >
+    <input
+      type="number"
+      min="1"
+      name="joined_number"
+      value="1"
+      required
+      id="small-input"
+      class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+  </div>
+  <div>
+    <label
+      for="small-input"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >کلاس</label
+    >
+    <select
+      id="countries"
+      name="classname"
+      required
+      class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    >
+      {% for i in form.classname %}
+      <option value='{{i}}'>{{i}}</option>
+      {% endfor %}
+    </select>
+
+  </div>
+  <button type="submit" class="text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">ذخیره کاربر</button>
+</form>
+
+{% endblock maincontent %}

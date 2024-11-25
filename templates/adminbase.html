@@ -44,8 +44,16 @@
         background: #3d68ff;
       }
     </style>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
   </head>
-  <body dir="rtl" style="font-family: Vazirmatn,Vazir;" class="bg-gray-100 font-family-vazirmatn flex">
+  <body
+    dir="rtl"
+    style="font-family: Vazirmatn, Vazir"
+    class="bg-gray-100 font-family-vazirmatn flex"
+  >
     <aside class="relative bg-sidebar h-screen w-64 hidden sm:block shadow-xl">
       <div class="p-6">
         <a
@@ -76,6 +84,13 @@
           <i class="fas fa-sticky-note mr-3 m-2"></i>
           بارگذاری فایل
         </a>
+        <a
+          href="{% url 'createuser' %}"
+          class="flex items-center text-white opacity-75 {% block createuser.html-style %} {% endblock createuser.html-style %} hover:opacity-100 py-2 pl-4 nav-item"
+        >
+        <i class="fa fa-user-plus mr-3 m-2" aria-hidden="true"></i>
+          ایجاد عضو جدید
+        </a>
       </nav>
     </aside>
     <div class="w-full flex flex-col h-screen overflow-y-hidden">
@@ -89,8 +104,6 @@
           >
             <img src="./Cropped_Image.png" />
           </button>
-
-
         </div>
       </header>
 
@@ -131,6 +144,13 @@
             بارگذاری فایل
           </a>
           <a
+            href="{% url 'import_excle_file' %}"
+            class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item"
+          >
+            <i class="fa-light fa-user-plus"></i>
+            ایجاد عضو جدید
+          </a>
+          <a
             href="#"
             class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item"
           >
@@ -146,15 +166,11 @@
       <div class="w-full overflow-x-hidden border-t flex flex-col">
         <main class="w-full flex-grow p-6">
           <h1 class="text-3xl text-black pb-6">
-            {% block heading %}
-                
-            {% endblock heading %}
+            {% block heading %} {% endblock heading %}
           </h1>
-          
-          {% block maincontent %}
-            
-          {% endblock maincontent %}
-            
+
+          {% block maincontent %} {% endblock maincontent %}
+
           <!-- <div class="w-full mt-12">
                       <p class="text-xl pb-3 flex items-center">
                           <i class="fas fa-list mr-3"></i> Latest Reports

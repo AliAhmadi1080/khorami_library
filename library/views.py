@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
 from django.shortcuts import render
+from account.forms import CustomeUserForm
 from .models import Book
 import pandas as pd
 import pdfplumber
@@ -62,6 +63,19 @@ def import_excle_file(request: HttpRequest):
 def dashbord(request: HttpRequest):
     context = {}
     return render(request, 'library\dashbord.html', context)
+
+
+@login_required
+def createuser(request: HttpRequest):
+    if request.method=='POST':
+        fullname = request.POST['fullname']
+        classname = request.POST['classname']
+        joined_number = request.POST['joined_number']
+        # TODO:Complit this
+        
+    form = CustomeUserForm()
+    context = {'form':form}
+    return render(request, 'library\createuser.html', context)
 
 
 def search(request: HttpRequest):
