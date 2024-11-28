@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.http.request import HttpRequest
+from account.forms import CustomUserForm
+from account.models import CustomUser
 from django.shortcuts import render
-from account.forms import CustomeUserForm
 from .models import Book
 import pandas as pd
 import pdfplumber
@@ -67,14 +68,24 @@ def dashbord(request: HttpRequest):
 
 @login_required
 def createuser(request: HttpRequest):
-    if request.method=='POST':
+    form = CustomUserForm()
+    context = {'form': form}
+
+    if request.method == 'POST':
         fullname = request.POST['fullname']
         classname = request.POST['classname']
         joined_number = request.POST['joined_number']
-        # TODO:Complit this
-        
-    form = CustomeUserForm()
-    context = {'form':form}
+        last_id = str(CustomUser.objects.last().id)
+        try:
+            user = CustomUser.objects.create(
+                username=fullname+last_id, fullname=fullname,
+                  classname=classname, joined_number=joined_number)
+            user.set_password(str(int(joined_number)*2+3))
+            user.save()
+        except BaseException as e:
+            print(e)
+            context['error'] = ''  # TODO:Write a error message
+
     return render(request, 'library\createuser.html', context)
 
 

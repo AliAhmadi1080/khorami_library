@@ -1,8 +1,8 @@
 from django import forms
-from .models import CustomeUser
+from .models import CustomUser
 
-class CustomeUserForm(forms.ModelForm):
+class CustomUserForm(forms.ModelForm):
 
     class Meta:
-        model = CustomeUser
+        model = CustomUser
         fields = ['fullname','classname','joined_number']
