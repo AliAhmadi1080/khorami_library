@@ -1,4 +1,6 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
+from django.contrib.auth.models import (AbstractBaseUser,
+                                        BaseUserManager, PermissionsMixin)
+from django.contrib.auth.hashers import make_password
 from django.db import models
 
 
@@ -9,6 +11,13 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('The Joined Number field must be set')
         user = self.model(joined_number=joined_number, fullname=fullname,
                           classname=classname, **extra_fields)
+        if password:
+            user.password = make_password(password)
+        else:
+            raise ValueError('The Password field must be set')
+
+        user.save(using=self._db)
+        return user
 
     def create_superuser(self, joined_number, fullname, classname,
                          password=None, **extra_fields):
