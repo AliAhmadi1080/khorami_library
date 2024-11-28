@@ -78,8 +78,10 @@ def createuser(request: HttpRequest):
         last_id = str(CustomUser.objects.last().id)
         try:
             user = CustomUser.objects.create(
+
                 username=fullname+last_id, fullname=fullname,
-                  classname=classname, joined_number=joined_number)
+                classname=classname, joined_number=joined_number)
+
             user.set_password(str(int(joined_number)*2+3))
             user.save()
         except BaseException as e:
