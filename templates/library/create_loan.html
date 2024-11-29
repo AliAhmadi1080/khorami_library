@@ -1,0 +1,97 @@
+{% extends 'adminbase.html' %} {% block title %} امانت گرفتن {% endblock title %} {% block heading %} ثبت قرض کتاب {% endblock heading %}
+{% block create_loan.html-style %} active-nav-link opacity-100 {% endblock create_loan.html-style %} {% block head %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<link
+  href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+  rel="stylesheet"
+/>
+<link
+  href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.min.css"
+  rel="stylesheet"
+/>
+<script src="https://cdn.jsdelivr.net/npm/jalaali-js/dist/jalaali.js"></script>
+{% endblock head %} {% block maincontent %}
+
+{% for i in errors %}        
+<div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+    <span class="font-medium">خطا</span> {{i}}
+</div>
+{% endfor %}
+
+<form class="max-w-sm" action="" method="POST">
+  {% csrf_token %}
+  <div>
+    <label
+      for="small-input"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >شخص عضو:</label
+    >
+    <input
+      type="number"
+      min="1"
+      name="joined_number"
+      required
+      id="small-input"
+      class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+  </div>
+  <br>
+  <div>
+    <label
+      for="small-input"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >کد کتاب</label
+    >
+    <input
+      type="text"
+      name="book_code"
+      required
+      id="small-input"
+      class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+  </div>
+  <br />
+  <div>
+    <label
+      for="small-input"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >تاریخ تحویل</label
+    >
+    <input data-jdp name="loan_date" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+  </div>
+  <br />
+  <div>
+    <label
+      for="small-input"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >تاریخ بازگشت</label
+    >
+    <input data-jdp name="return_date" class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+  </div>
+  <br>
+  <div>
+    <label
+      for="small-input"
+      class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+      >ملاحضات</label
+    >
+    <input
+      type="text"
+      name="notes"
+      id="small-input"
+      class="block w-full p-2 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    />
+  </div>
+
+  <button
+    type="submit"
+    class="text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+  >
+    ذخیره کاربر
+  </button>
+</form>
+
+<link rel="stylesheet" href="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css">
+<script type="text/javascript" src="https://unpkg.com/@majidh1/jalalidatepicker/dist/jalalidatepicker.min.js"></script>
+<script>jalaliDatepicker.startWatch();</script>
+{% endblock maincontent %}

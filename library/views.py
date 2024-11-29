@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
 from account.models import CustomUser
 from django.shortcuts import render
-from .models import Book
+from .models import Book, Loan
+from .forms import LoanForm
 import pandas as pd
 import pdfplumber
 import threading
@@ -38,12 +40,18 @@ def handle_uploaded_file(f):
                                 numbetsdone += 1
                     row[1] = text
                     rows_list.append(row)
+
     df = pd.DataFrame(rows_list[1:], columns=rows_list[0])
     df.columns = ['code', "name", 'row_number']
     for index, row in df.iterrows():
+        code_number = row['code'].split('.')[0].zfill(4)
+        code_char = '.'.join(row['code'].split('.')[1:][::-1]).strip()
+        code = code_number + \
+            code_char if not (code_number == '0000' or code_char == '') else ''
+        code = code.replace(' ', '')
         try:
             book = Book.objects.create(
-                name=row['name'], code=row['code'],
+                name=row['name'], code=code,
                 row_number=int(row['row_number']))
         except:
             pass
@@ -67,7 +75,7 @@ def dashbord(request: HttpRequest):
 
 
 @login_required
-def createuser(request: HttpRequest):
+def create_user(request: HttpRequest):
     form = CustomUserForm()
     context = {'form': form}
 
@@ -86,9 +94,9 @@ def createuser(request: HttpRequest):
             user.save()
         except BaseException as e:
             print(e)
-            context['error'] = ''  # TODO:Write a error message
+            context['error'] = 'این شماره عضویت وجود دارد'  # TODO:Write a error message
 
-    return render(request, 'library\createuser.html', context)
+    return render(request, 'library\create_user.html', context)
 
 
 def search(request: HttpRequest):
@@ -99,3 +107,32 @@ def search(request: HttpRequest):
     context = {'books': books, 'count': Book.objects.all().count()
                if not input else books.count()}
     return render(request, 'library\search.html', context)
+
+
+@login_required
+def create_loan(request: HttpRequest):
+    form = LoanForm()
+    context = {'form': form, 'errors': []}
+    if request.method == 'POST':
+        context['form'] = LoanForm(request.POST)
+        joined_number = request.POST['joined_number'].replace(' ', '')
+        try:
+            user = get_object_or_404(CustomUser, joined_number=joined_number)
+        except:
+            context['errors'].append('این شماره عضویت وجود ندارد')
+        book_code = request.POST['book_code'].replace(' ', '')
+        try:
+            book = get_object_or_404(Book, code=book_code)
+        except:
+            context['errors'].append('این کد برای کتاب ها وجود ندارد')
+        if not context['errors'] == []:
+            return render(request, 'library\create_loan.html', context)
+        loan_date = request.POST['loan_date'].replace('/', '-')
+        return_date = request.POST['return_date'].replace('/', '-')
+        notes = request.POST['notes']
+
+        loan = Loan.objects.create(
+            user=user, book=book, loan_date=loan_date,
+            return_date=return_date, notes=notes)
+        loan.save()
+    return render(request, 'library\create_loan.html', context)
