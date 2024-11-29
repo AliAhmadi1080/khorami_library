@@ -77,7 +77,7 @@ def dashbord(request: HttpRequest):
 @login_required
 def create_user(request: HttpRequest):
     form = CustomUserForm()
-    context = {'form': form}
+    context = {'form': form, 'error': None}
 
     if request.method == 'POST':
         fullname = request.POST['fullname']
@@ -94,7 +94,8 @@ def create_user(request: HttpRequest):
             user.save()
         except BaseException as e:
             print(e)
-            context['error'] = 'این شماره عضویت وجود دارد'  # TODO:Write a error message
+            # TODO:Write a error message
+            context['error'] = 'این شماره عضویت وجود دارد'
 
     return render(request, 'library\create_user.html', context)
 

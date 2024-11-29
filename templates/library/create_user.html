@@ -2,6 +2,13 @@
 opacity-100 {% endblock createuser.html-style %} {% block title %} ایجاد عضو
 جدید {% endblock title %} {% block heading %} ایجاد عضو جدید کتابخانه {%endblock heading %} {% block maincontent %}
 
+{% if error is not None %}
+<div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+    <span class="font-medium">خطا</span> {{error}}
+</div>
+{% endif %}
+    
+
 <form class="max-w-sm" action="" method="POST">
     {% csrf_token %}
   <div>
