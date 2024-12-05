@@ -143,6 +143,7 @@ def create_loan(request: HttpRequest):
 def search_user(request: HttpRequest):
     context = {'user_loans':None}
     input = request.GET.get('input', None)
+    
     if input:
         user_loans = []
         users = CustomUser.objects.filter(fullname__contains=input)
