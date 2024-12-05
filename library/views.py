@@ -1,9 +1,10 @@
+from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.http.request import HttpRequest
-from django.http import HttpResponse
 from account.forms import CustomUserForm
 from account.models import CustomUser
+from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Book, Loan
 from .forms import LoanForm
@@ -58,7 +59,22 @@ def handle_uploaded_file(f):
             pass
 
 
-@login_required
+def superuser_required(function=None, redirect_field_name='next', login_url='/account/login/'):
+    """
+    Decorator for views that checks that the user is a superuser, redirecting
+    to the log-in page if necessary.
+    """
+    actual_decorator = user_passes_test(
+        lambda u: u.is_active and u.is_superuser,
+        login_url=login_url,
+        redirect_field_name=redirect_field_name
+    )
+    if function:
+        return actual_decorator(function)
+    return actual_decorator
+
+
+@superuser_required
 def import_excle_file(request: HttpRequest):
     context = {}
     if request.method == 'POST':
@@ -69,13 +85,13 @@ def import_excle_file(request: HttpRequest):
     return render(request, 'library\inputfile.html', context)
 
 
-@login_required
+@superuser_required
 def dashbord(request: HttpRequest):
     context = {}
     return render(request, 'library\dashbord.html', context)
 
 
-@login_required
+@superuser_required
 def create_user(request: HttpRequest):
     form = CustomUserForm()
     context = {'form': form, 'error': None}
@@ -111,7 +127,7 @@ def search(request: HttpRequest):
     return render(request, 'library\search.html', context)
 
 
-@login_required
+@superuser_required
 def create_loan(request: HttpRequest):
     form = LoanForm()
     context = {'form': form, 'errors': []}
@@ -139,11 +155,11 @@ def create_loan(request: HttpRequest):
         loan.save()
     return render(request, 'library\create_loan.html', context)
 
-@login_required
+@superuser_required
 def search_user(request: HttpRequest):
     context = {'user_loans':None}
     input = request.GET.get('input', None)
-    
+
     if input:
         user_loans = []
         users = CustomUser.objects.filter(fullname__contains=input)
@@ -155,8 +171,9 @@ def search_user(request: HttpRequest):
         print(context)
     return render(request, 'library\search_user.html', context)
 
+@superuser_required
 def undo_loan(request,loan_id:int):
-    loan = Loan.objects.get(id=loan_id)
+    loan = get_object_or_404(Loan, id=loan_id)
     loan.is_return=True
     loan.save()
     return HttpResponse('all is right')
