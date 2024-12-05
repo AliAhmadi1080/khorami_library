@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.http.request import HttpRequest
+from django.http import HttpResponse
 from account.forms import CustomUserForm
 from account.models import CustomUser
 from django.shortcuts import render
@@ -137,3 +138,25 @@ def create_loan(request: HttpRequest):
             return_date=return_date, notes=notes)
         loan.save()
     return render(request, 'library\create_loan.html', context)
+
+@login_required
+def search_user(request: HttpRequest):
+    context = {'user_loans':None}
+    input = request.GET.get('input', None)
+    if input:
+        user_loans = []
+        users = CustomUser.objects.filter(fullname=input)
+        for user in users:
+            loans = Loan.objects.filter(user=user)
+            user_loans.append({user: loans})
+            
+        context['user_loans'] = user_loans
+        print(context)
+    return render(request, 'library\search_user.html', context)
+
+def undo_loan(request,loan_id:int):
+    loan = Loan.objects.get(id=loan_id)
+    loan.is_return=True
+    loan.save()
+    return HttpResponse('all is right')
+

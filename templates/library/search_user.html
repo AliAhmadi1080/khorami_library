@@ -1,0 +1,200 @@
+{% extends 'adminbase.html' %}
+
+{% block title %}
+        جست و جو  
+{% endblock title %}
+
+{% block heading %}
+        جست و جو دانش آموز
+{% endblock heading %}
+
+{% block search_user.html-style %}
+        active-nav-link  opacity-100
+{% endblock search_user.html-style %}
+{% block maincontent %}
+<div class="mx-auto">
+  <form class="max-w-lg mx-auto" dir="rtl">
+    <div class="flex">
+      <div class="relative w-full">
+        <input
+          type="search"
+          id="search-dropdown"
+          class="block rounded-l-lg p-2.5 pr-10 w-full z-20 text-sm text-gray-900 bg-gray-50 rounded-e-lg border-s-gray-50 border-s-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-s-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+          placeholder="جست و جو"
+          name="input"
+          required
+        />
+        <button
+          type="submit"
+          class="absolute top-0 end-0 rounded-r-lg p-2.5 text-sm font-medium h-full text-white bg-blue-700 rounded-e-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        >
+          <svg
+            class="w-4 h-4"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 20 20"
+          >
+            <path
+              stroke="currentColor"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
+            />
+          </svg>
+          <span class="sr-only">جست و جو</span>
+        </button>
+      </div>
+    </div>
+  </form>
+  <div
+    class="relative flex flex-col w-full h-full overflow-auto text-gray-700 bg-white shadow-md rounded-xl bg-clip-border"
+  >
+    <table class="w-full text-right table-auto min-w-max">
+      <thead>
+        <tr>
+          <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+            <p
+              class="block text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70"
+            >
+              ردیف
+            </p>
+          </th>
+          <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+            <p
+              class="block text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70"
+            >
+              نام کتاب
+            </p>
+          </th>
+          <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+            <p
+              class="block text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70"
+            >
+              کد
+            </p>
+          </th>
+          <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+            <p
+              class="block text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70"
+            >ملاحضات</p>
+            </th>
+             <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                <p
+                  class="block text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70"
+                >
+                  وضعیت
+                </p>
+              
+          </th>
+          <th class="p-4 border-b border-blue-gray-100 bg-blue-gray-50">
+                <p
+                  class="block text-sm antialiased font-normal leading-none text-blue-gray-900 opacity-70"
+                >
+                  
+                </p>
+              </th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for users in user_loans %}
+        <tr>
+          <td class="p-4 border-b border-blue-gray-50">
+            <p
+              class="block text-xl antialiased font-bold leading-normal text-blue-gray-900"
+            >
+              
+              {% for user in users %}
+                {{user.fullname}}
+                
+                {% for loans in users.values %}
+                        
+                        {% for loan in loans %}
+                        <tr>
+                                <td class="p-4 border-b border-blue-gray-50">
+                                  <p
+                                    class="block text-sm antialiased font-normal leading-normal text-blue-gray-900"
+                                  >
+                                    {{loan.book.row_number}}
+                                  </p>
+                                </td>
+                                <td class="p-4 border-b border-blue-gray-50">
+                                  <p
+                                    class="block text-sm antialiased font-normal leading-normal text-blue-gray-900"
+                                  >
+                                    {{loan.book.name}}
+                                  </p>
+                                </td>
+                                <td class="p-4 border-b border-blue-gray-50">
+                                  <p
+                                    class="block text-sm antialiased font-normal leading-normal text-blue-gray-900"
+                                  >
+                                    {{loan.book.code}}
+                                  </p>
+                                </td>
+                                <td class="p-4 border-b border-blue-gray-50">
+                                  <p
+                                    class="block text-sm antialiased font-normal leading-normal text-blue-gray-900"
+                                  >
+                                    {{loan.notes}}
+                                  </p>
+                                </td>
+                                
+                                <td class="p-4 border-b border-blue-gray-50">
+                                        <p
+                                          class="block text-sm antialiased font-normal leading-normal text-blue-gray-900"
+                                        >
+                                        
+                                        {% if loan.is_return %}
+                                                
+                                                  بازگشته
+                                        {% else %}
+                                        بازنگشته
+                                        {% endif %}
+                                                
+                                        </p>
+                                      </td>
+                                      <td class="p-4 border-b border-blue-gray-50">
+                                        <p
+                                          class="block text-sm antialiased font-normal leading-normal text-blue-gray-900"
+                                        >
+                                        
+                                        
+                                        {% if not loan.is_return %}
+                                          <button type="submit" onclick="button_click(`{{loan.id}}`)" class="text-white bg-green-700 hover:bg-green-800 font-medium rounded-full text-sm px-5 py-2.5 text-center me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800">باز گشت؟</button>
+                                          
+                                        {% endif %}
+                                          
+                                        </p>
+                                      </td>
+                              </tr>
+
+
+                        
+              {% endfor %}
+              {% endfor %}
+              {% endfor %}
+                
+            </p>
+          </td>     
+          
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+<script>function button_click(id){
+fetch(`http://127.0.0.1:8000/undo_return/${id}`, {
+  headers: {
+    "Content-Type": "application/json",
+  },
+  
+})
+  .then((response)=>{if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }return response}) .then((data) => {console.log(data)});
+    
+}</script>
+{% endblock maincontent %}

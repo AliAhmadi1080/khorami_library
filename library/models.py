@@ -19,6 +19,7 @@ class Loan(models.Model):
         CustomUser, verbose_name='متقاضی', on_delete=models.CASCADE)
     loan_date = jmodels.jDateField('تاریخ تحویل', auto_now_add=True)
     return_date = jmodels.jDateField('تاریخ بازگشت')
+    is_return = models.BooleanField(default=False)
     notes = models.TextField(null=True, blank=True)
 
     def __str__(self):
