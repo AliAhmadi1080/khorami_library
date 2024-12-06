@@ -4,7 +4,7 @@ from .views import (import_excle_file, dashbord,undo_loan,
                     search_user, search, create_user, create_loan)
 
 urlpatterns = [
-    path("accounts/login/", views.LoginView.as_view(), name="login"),
+    path("account/login/", views.LoginView.as_view(), name="login"),
     path('import_file/', import_excle_file, name='import_excle_file'),
     path('dashbord/', dashbord, name='dashbord'),
     path('undo_return/<int:loan_id>', undo_loan, name='undo_return'),
