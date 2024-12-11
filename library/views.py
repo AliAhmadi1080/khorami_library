@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.decorators import login_required
+from django.utils.timezone import now, timedelta
 from django.shortcuts import get_object_or_404
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
@@ -7,6 +7,7 @@ from account.models import CustomUser
 from django.http import HttpResponse
 from django.shortcuts import render
 from .models import Book, Loan
+from datetime import datetime
 from .forms import LoanForm
 import pandas as pd
 import pdfplumber
@@ -18,7 +19,7 @@ def handle_uploaded_file(f):
         for chunk in f.chunks():
             destination.write(chunk)
 
-    pdf_path = 'files/name.pdf'  # Replace with your PDF file path
+    pdf_path = 'files/name.pdf'
     rows_list = []
     Book.objects.all().delete()
     with pdfplumber.open(pdf_path) as pdf:
@@ -87,7 +88,22 @@ def import_excle_file(request: HttpRequest):
 
 @superuser_required
 def dashbord(request: HttpRequest):
-    context = {}
+    thirty_days_ago = now() - timedelta(days=30)
+    thirty_days_ago_loans = Loan.objects.filter(
+        return_date__gte=thirty_days_ago)
+    thirty_days_ago_loans = [
+        thirty_days_ago_loans.filter(is_return=False).count(),
+        thirty_days_ago_loans.filter(is_return=True).count()]
+    today_date = datetime.now()
+    unforce_return = Loan.objects.filter(
+        is_return=False)
+    force_return = Loan.objects.filter(
+        is_return=False, return_date__lte=today_date)
+    unforce_return = unforce_return.exclude(
+        id__in=force_return.values_list('id', flat=True))
+
+    context = {'force_return': force_return, 'unforce_return': unforce_return,
+               'thirty_days_ago_loans': thirty_days_ago_loans}
     return render(request, 'library\dashbord.html', context)
 
 
@@ -110,8 +126,6 @@ def create_user(request: HttpRequest):
             user.set_password(str(int(joined_number)*2+3))
             user.save()
         except BaseException as e:
-            print(e)
-            # TODO:Write a error message
             context['error'] = 'این شماره عضویت وجود دارد'
 
     return render(request, 'library\create_user.html', context)
@@ -155,9 +169,10 @@ def create_loan(request: HttpRequest):
         loan.save()
     return render(request, 'library\create_loan.html', context)
 
+
 @superuser_required
 def search_user(request: HttpRequest):
-    context = {'user_loans':None}
+    context = {'user_loans': None}
     input = request.GET.get('input', None)
 
     if input:
@@ -166,15 +181,15 @@ def search_user(request: HttpRequest):
         for user in users:
             loans = Loan.objects.filter(user=user)
             user_loans.append({user: loans})
-            
+
         context['user_loans'] = user_loans
-        print(context)
+
     return render(request, 'library\search_user.html', context)
 
+
 @superuser_required
-def undo_loan(request,loan_id:int):
+def undo_loan(request, loan_id: int):
     loan = get_object_or_404(Loan, id=loan_id)
-    loan.is_return=True
+    loan.is_return = True
     loan.save()
     return HttpResponse('all is right')
-

@@ -1,13 +1,110 @@
-{% extends 'adminbase.html' %}
+{% extends 'adminbase.html' %} {% block head %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+{% endblock head %}{% block title %} داشبورد {% endblock title %} {% block heading %} داشبورد کتابخانه مدرسه دکتر خرمی {% endblock heading %} {% block dashbord.html-style %} active-nav-link opacity-100 {% endblock dashbord.html-style %} {% block maincontent %}
+<div
+  class="flex flex-col lg:justify-between items-center lg:flex-row lg:justify-around mt-6"
+>
+  <div class="flex flex-col justify-around" dir="rtl">
+    <div class="relative my-3 overflow-x-auto shadow-md sm:rounded-lg">
+      <p class="w-full text-center mb-2">بازنگشتی های تاریخ گذشته</p>
+      <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
+        <thead
+          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        >
+          <tr>
+            <th scope="col" class="px-6 py-3">نام دانش آموز</th>
+            <th scope="col" class="px-6 py-3">شماره عضویت</th>
+            <th scope="col" class="px-6 py-3">تاریخ بازگشت</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for loan in force_return %}
+          <tr
+            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+          >
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{loan.user.fullname}}
+            </th>
+            <td class="px-6 py-4">{{loan.user.joined_number}}</td>
+            <td class="px-6 py-4 text-red-400">{{loan.return_date}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+      <p class="w-full text-center mb-2">بازنگشتی های با تاریخ</p>
+      <table class="w-full text-sm text-right text-gray-500 dark:text-gray-400">
+        <thead
+          class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+        >
+          <tr>
+            <th scope="col" class="px-6 py-3">نام دانش آموز</th>
+            <th scope="col" class="px-6 py-3">شماره عضویت</th>
+            <th scope="col" class="px-6 py-3">تاریخ بازگشت</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for loan in unforce_return %}
+          <tr
+            class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700"
+          >
+            <th
+              scope="row"
+              class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            >
+              {{loan.user.fullname}}
+            </th>
+            <td class="px-6 py-4">{{loan.user.joined_number}}</td>
+            <td class="px-6 py-4 text-blue-600">{{loan.return_date}}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-{% block title %}
-        داشبورد 
-{% endblock title %}
+  <canvas
+    id="myChart"
+    class="w-full md:visible invisible"
+    style="max-width: 700px; font-family: Vazirmatn"
+  ></canvas>
+</div>
 
-{% block heading %}
-        داشبورد کتابخانه مدرسه دکتر خرمی    
-{% endblock heading %}
-
-{% block dashbord.html-style %}
-        active-nav-link  opacity-100
-{% endblock dashbord.html-style %}
+<script>
+  const xValues = ["بازنگشتی های تاریخ گذشته", "بازنگشتی های  با تاریخ"];
+  const yValues = [{{thirty_days_ago_loans.0}}, {{thirty_days_ago_loans.1}}];
+  const barColors = ["#b91d47", "#00aba9"];
+  let chart = new Chart("myChart", {
+    type: "pie",
+    data: {
+      labels: xValues,
+      datasets: [
+        {
+          backgroundColor: barColors,
+          data: yValues,
+        },
+      ],
+    },
+    options: {
+      title: {
+        display: true,
+        text: "بازگشتی های 30 روز گذشته کتابخانه",
+      },
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: "'Vazirmatn', 'vazir'",
+            },
+          },
+        },
+      },
+    },
+  });
+  chart.options.plugins.legend.labels.font.family = "Vazirmatn";
+</script>
+{% endblock maincontent %}
