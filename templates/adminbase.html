@@ -111,13 +111,7 @@
               d="M2 15.5V2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.74.439L8 13.069l-5.26 2.87A.5.5 0 0 1 2 15.5m6.5-11a.5.5 0 0 0-1 0V6H6a.5.5 0 0 0 0 1h1.5v1.5a.5.5 0 0 0 1 0V7H10a.5.5 0 0 0 0-1H8.5z"
             />
           </svg>
-          امانت گرفتن </a
-        ><a
-          href="{% url 'search_user' %}"
-          class="flex items-center text-white opacity-75 {% block search_user.html-style %} {% endblock search_user.html-style %}hover:opacity-100 py-2 pl-4 nav-item"
-        >
-        <i class="fa fa-search mr-3 m-2"></i>
-          جست و جو
+          امانت گرفتن
         </a>
       </nav>
     </aside>
@@ -142,7 +136,7 @@
       >
         <div class="flex items-center justify-between">
           <a
-            href="index.html"
+            href="{% url 'dashbord' %}"
             class="text-white text-3xl font-semibold uppercase hover:text-gray-300"
             >پنل کتابخانه</a
           >
@@ -197,13 +191,6 @@
             </svg>
             امانت گرفتن
           </a>
-          <a
-          href="{% url 'search_user' %}"
-          class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item"
-        >
-        <i class="fa fa-search mr-3 m-2"></i>
-          جست و جو
-        </a>
         </nav>
         <!-- <button class="w-full bg-white cta-btn font-semibold py-2 mt-5 rounded-br-lg rounded-bl-lg rounded-tr-lg shadow-lg hover:shadow-xl hover:bg-gray-300 flex items-center justify-center">
                   <i class="fas fa-plus mr-3"></i> New Report
@@ -217,8 +204,7 @@
           </h1>
 
           {% block maincontent %} {% endblock maincontent %}
-
-                </main>
+        </main>
 
         <footer class="w-full bg-white text-right p-4">
           ایجاد شده توسط

@@ -169,9 +169,6 @@ def create_loan(request: HttpRequest):
         loan.save()
     return render(request, 'library\create_loan.html', context)
 
-
-@superuser_required
-def search_user(request: HttpRequest):
     context = {'user_loans': None}
     input = request.GET.get('input', None)
 
