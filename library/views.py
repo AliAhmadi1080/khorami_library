@@ -89,12 +89,6 @@ def import_pdf_file(request: HttpRequest):
 
 @superuser_required
 def dashbord(request: HttpRequest):
-    thirty_days_ago = now() - timedelta(days=30)
-    thirty_days_ago_loans = Loan.objects.filter(
-        return_date__gte=thirty_days_ago)
-    thirty_days_ago_loans = [
-        thirty_days_ago_loans.filter(is_return=False).count(),
-        thirty_days_ago_loans.filter(is_return=True).count()]
     today_date = datetime.now()
     unforce_return = Loan.objects.filter(
         is_return=False)
@@ -103,8 +97,8 @@ def dashbord(request: HttpRequest):
     unforce_return = unforce_return.exclude(
         id__in=force_return.values_list('id', flat=True))
 
-    context = {'force_return': force_return, 'unforce_return': unforce_return,
-               'thirty_days_ago_loans': thirty_days_ago_loans}
+    context = {'force_return': force_return,
+               'unforce_return': unforce_return, }
     return render(request, 'library\dashbord.html', context)
 
 
