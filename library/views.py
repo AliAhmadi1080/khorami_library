@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.utils.timezone import now, timedelta
 from django.shortcuts import get_object_or_404
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
@@ -84,7 +83,7 @@ def import_pdf_file(request: HttpRequest):
         t1 = threading.Thread(target=handle_uploaded_file, args=(file,))
         t1.start()
         context['succses'] = True
-    return render(request, 'library\inputfile.html', context)
+    return render(request, 'library/admin/inputfile.html', context)
 
 
 @superuser_required
@@ -99,7 +98,7 @@ def dashbord(request: HttpRequest):
 
     context = {'force_return': force_return,
                'unforce_return': unforce_return, }
-    return render(request, 'library\dashbord.html', context)
+    return render(request, 'library/admin/dashbord.html', context)
 
 
 @superuser_required
@@ -123,17 +122,17 @@ def create_user(request: HttpRequest):
         except BaseException as e:
             context['error'] = 'این شماره عضویت وجود دارد'
 
-    return render(request, 'library\create_user.html', context)
+    return render(request, 'library/admin/create_user.html', context)
 
 
-def search(request: HttpRequest):
+def home_page(request: HttpRequest):
     input = request.GET.get('input', None)
     books = Book.objects.filter(name__contains=input if input else '')
     if input is None:
         books = books[:20]
     context = {'books': books, 'count': Book.objects.all().count()
                if not input else books.count()}
-    return render(request, 'library\search.html', context)
+    return render(request, 'library/user-side/homepage.html', context)
 
 
 @superuser_required
@@ -153,7 +152,7 @@ def create_loan(request: HttpRequest):
         except:
             context['errors'].append('این کد برای کتاب ها وجود ندارد')
         if not context['errors'] == []:
-            return render(request, 'library\create_loan.html', context)
+            return render(request, 'library/admin/create_loan.html', context)
         loan_date = request.POST['loan_date'].replace('/', '-')
         return_date = request.POST['return_date'].replace('/', '-')
         notes = request.POST['notes']
@@ -162,7 +161,7 @@ def create_loan(request: HttpRequest):
             user=user, book=book, loan_date=loan_date,
             return_date=return_date, notes=notes)
         loan.save()
-    return render(request, 'library\create_loan.html', context)
+    return render(request, 'library/admin/create_loan.html', context)
 
 
 @superuser_required
@@ -193,4 +192,4 @@ def search_books(request):
             results = results.filter(is_return=is_return)
         context['is_return'] = is_return
         context['results'] = results
-    return render(request, 'library/search_books.html', context)
+    return render(request, 'library/admin/search_books.html', context)
