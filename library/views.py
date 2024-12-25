@@ -6,6 +6,7 @@ from account.forms import CustomUserForm
 from account.models import CustomUser
 from django.http import HttpResponse
 from django.shortcuts import render
+from .forms import BookSearchForm
 from .models import Book, Loan
 from datetime import datetime
 from .forms import LoanForm
@@ -76,7 +77,7 @@ def superuser_required(function=None, redirect_field_name='next', login_url='/ac
 
 
 @superuser_required
-def import_excle_file(request: HttpRequest):
+def import_pdf_file(request: HttpRequest):
     context = {}
     if request.method == 'POST':
         file = request.FILES["inputfile"]
@@ -169,20 +170,6 @@ def create_loan(request: HttpRequest):
         loan.save()
     return render(request, 'library\create_loan.html', context)
 
-    context = {'user_loans': None}
-    input = request.GET.get('input', None)
-
-    if input:
-        user_loans = []
-        users = CustomUser.objects.filter(fullname__contains=input)
-        for user in users:
-            loans = Loan.objects.filter(user=user)
-            user_loans.append({user: loans})
-
-        context['user_loans'] = user_loans
-
-    return render(request, 'library\search_user.html', context)
-
 
 @superuser_required
 def undo_loan(request, loan_id: int):
@@ -190,3 +177,26 @@ def undo_loan(request, loan_id: int):
     loan.is_return = True
     loan.save()
     return HttpResponse('all is right')
+
+
+def search_books(request):
+    form = BookSearchForm(request.GET or None)
+    context = {'form': form}
+    results = None
+    if form.is_valid():
+        name = form.cleaned_data.get('name')
+        code = form.cleaned_data.get('code')
+        user = form.cleaned_data.get('user')
+        is_return = form.cleaned_data.get('is_return')
+        results = Loan.objects.select_related('book', 'user')
+        if name:
+            results = results.filter(book__name__contains=name)
+        if code:
+            results = results.filter(book__code__contains=code)
+        if user:
+            results = results.filter(user__username__contains=user)
+        if is_return is not None:
+            results = results.filter(is_return=is_return)
+        context['is_return'] = is_return
+        context['results'] = results
+    return render(request, 'library/search_books.html', context)
