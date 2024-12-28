@@ -79,6 +79,9 @@ This is a Django-based library management system for managing books, users, and 
 - **Search Books**: Search for books at `/search_books/`.
 - **Import PDF File**: Import book data from a PDF file at `/import_file/`.
 
+# TODO
+- use stronger password generator 
+
 ## License
 
 This project is licensed under the GNU General Public License v3.0.
