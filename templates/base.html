@@ -29,7 +29,7 @@
         dir="ltr"
         class="flex md:flex-row flex-col-reverse md:justify-center w-full items-center"
       >
-        <form method="GET" action="">
+        <form method="GET" action="{% url 'search_book' %}">
           <input
             type="text"
             class="border h-10 rounded-lg mx-5 px-5"
@@ -59,13 +59,7 @@
         </div>
       </div>
     </nav>
-    
-    <main>
-        
-        {% block maincontent %}
-            
-        {% endblock maincontent %}
-            
-    </main>
+
+    <main>{% block maincontent %} {% endblock maincontent %}</main>
   </body>
 </html>
