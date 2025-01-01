@@ -205,3 +205,14 @@ def search_books(request: HttpRequest):
 class UserLoginView(LoginView):
     template_name = 'library/user-side/login.html'
     redirect_authenticated_user = 'homepage'
+
+
+<< << << < HEAD
+== == == =
+
+
+class UserLogoutView(LogoutView):
+    ...
+
+
+>>>>>> > a97aa1136a9ff7859126125cbb4e3daede5cd5fc
