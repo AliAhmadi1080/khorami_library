@@ -193,3 +193,8 @@ def search_books(request):
         context['is_return'] = is_return
         context['results'] = results
     return render(request, 'library/admin/search_books.html', context)
+
+
+def login_page(request):
+    context = {}
+    return render(request, 'library/user-side/login.html')
