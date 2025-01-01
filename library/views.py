@@ -1,13 +1,13 @@
 from django.contrib.auth.decorators import user_passes_test
+from .forms import BookSearchForm, PostForm, CategoryForm
 from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404
+from .models import Book, Loan, Category, Post
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
 from account.models import CustomUser
 from django.http import HttpResponse
 from django.shortcuts import render
-from .forms import BookSearchForm
-from .models import Book, Loan
 from datetime import datetime
 from .forms import LoanForm
 import pandas as pd
@@ -205,3 +205,52 @@ def search_books(request: HttpRequest):
 class UserLoginView(LoginView):
     template_name = 'library/user-side/login.html'
     redirect_authenticated_user = 'homepage'
+
+
+def create_post(request: HttpRequest):
+    form = PostForm()
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            form.save()
+    context = {'form': form}
+    return render(request, 'library/admin/create_post.html', context)
+
+
+def edit_post(request: HttpRequest, post_id):
+
+    post = get_object_or_404(Post, id=post_id)
+    form = PostForm(instance=post)
+
+    if request.method == "POST":
+        form = PostForm(request.POST)
+        if form.is_valid():
+            data = form.data
+            post.title = data['title']
+            post.body = data['body']
+            post.categories.clear()
+            for i in request.POST.getlist('categories'):
+                category = Category.objects.get(id=i)
+                post.categories.add(category)
+            post.save()
+
+    title_value = post.title
+    body_value = post.body
+    context = {'form': form,
+               'title_value': title_value, 'body_value': body_value}
+    return render(request, 'library/admin/edit_post.html', context)
+
+
+def see_posts(request):
+    posts = Post.objects.all()
+    context = {'posts': posts}
+    return render(request, 'library/admin/see_posts.html', context)
+
+
+def create_category(request: HttpRequest):
+    if request.method == "POST":
+        name = request.POST['name']
+        category = Category.objects.create(name=name)
+        category.save()
+    context = {}
+    return render(request, 'library/admin/create_category.html', context)

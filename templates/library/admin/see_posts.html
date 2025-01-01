@@ -1,0 +1,30 @@
+{% extends 'adminbase.html' %}{% block see_posts.html-style %} active-nav-link opacity-100 {% endblock see_posts.html-style %} {% block heading %} همه پست ها{% endblock heading %} {% block title %} همه پست ها {% endblock title %} {% block maincontent %}
+<div class="mt-8">
+  <h2 class="text-2xl font-semibold text-gray-800 mb-4">نتایج جستجو:</h2>
+  <table
+    class="min-w-full bg-white text-right border border-gray-200 rounded-lg shadow"
+  >
+    <thead>
+      <tr>
+        <th class="py-2 px-4 border-b">#</th>
+        <th class="py-2 px-4 border-b">عنوان</th>
+        <th class="py-2 px-4 border-b">تاریخ ایجاد</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}
+
+      <tr>
+        <td class="py-2 px-4 border-b">
+          <a href="{% url 'edit_post' post_id=post.id %}"> {{forloop.counter}}</a>
+        </td>
+
+        <td class="py-2 px-4 border-b">{{post.title}}</td>
+        <td class="py-2 px-4 border-b">{{post.created_on}}</td>
+      </tr>
+
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock maincontent %}
