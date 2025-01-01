@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.views import LoginView,LogoutView
+from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
@@ -205,6 +205,3 @@ def search_books(request: HttpRequest):
 class UserLoginView(LoginView):
     template_name = 'library/user-side/login.html'
     redirect_authenticated_user = 'homepage'
-
-class UserLogoutView(LogoutView):
-    ...
