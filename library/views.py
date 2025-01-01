@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.views import LoginView,LogoutView
 from django.shortcuts import get_object_or_404
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
@@ -126,13 +127,19 @@ def create_user(request: HttpRequest):
 
 
 def home_page(request: HttpRequest):
-    input = request.GET.get('input', None)
+    context = {}
+    return render(request, 'library/user-side/homepage.html', context)
+
+
+def search_book(request: HttpRequest):
+    input = request.GET.get('input', None).strip()
     books = Book.objects.filter(name__contains=input if input else '')
-    if input is None:
+    if input is None or input == '':
         books = books[:20]
     context = {'books': books, 'count': Book.objects.all().count()
-               if not input else books.count()}
-    return render(request, 'library/user-side/homepage.html', context)
+               if not input else books.count(), 'input': input}
+
+    return render(request, 'library/user-side/search_book.html', context)
 
 
 @superuser_required
@@ -165,14 +172,14 @@ def create_loan(request: HttpRequest):
 
 
 @superuser_required
-def undo_loan(request, loan_id: int):
+def undo_loan(request: HttpRequest, loan_id: int):
     loan = get_object_or_404(Loan, id=loan_id)
     loan.is_return = True
     loan.save()
     return HttpResponse('all is right')
 
 
-def search_books(request):
+def search_books(request: HttpRequest):
     form = BookSearchForm(request.GET or None)
     context = {'form': form}
     results = None
@@ -193,3 +200,11 @@ def search_books(request):
         context['is_return'] = is_return
         context['results'] = results
     return render(request, 'library/admin/search_books.html', context)
+
+
+class UserLoginView(LoginView):
+    template_name = 'library/user-side/login.html'
+    redirect_authenticated_user = 'homepage'
+
+class UserLogoutView(LogoutView):
+    ...
