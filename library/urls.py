@@ -2,7 +2,7 @@ from django.urls import path
 from django.contrib.auth import views
 from .views import (import_pdf_file, dashbord, undo_loan,
                     home_page, create_user, create_loan, search_books,
-                    login_page,search_book
+                    UserLoginView, search_book
                     )
 
 urlpatterns = [
@@ -15,7 +15,8 @@ urlpatterns = [
     path('search_books/', search_books, name='search_books'),
     # user side
     path('', home_page, name='homepage'),
-    path('login/', login_page, name='login'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    path('logout/', views.LogoutView.as_view(), name='logout'),
     path('search_book/', search_book, name='search_book'),
 
 ]

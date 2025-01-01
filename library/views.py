@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.views import LoginView,LogoutView
 from django.shortcuts import get_object_or_404
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
@@ -133,11 +134,11 @@ def home_page(request: HttpRequest):
 def search_book(request: HttpRequest):
     input = request.GET.get('input', None).strip()
     books = Book.objects.filter(name__contains=input if input else '')
-    if input is None or input=='':
+    if input is None or input == '':
         books = books[:20]
     context = {'books': books, 'count': Book.objects.all().count()
-               if not input else books.count(),'input':input}
-    
+               if not input else books.count(), 'input': input}
+
     return render(request, 'library/user-side/search_book.html', context)
 
 
@@ -201,6 +202,9 @@ def search_books(request: HttpRequest):
     return render(request, 'library/admin/search_books.html', context)
 
 
-def login_page(request: HttpRequest):
-    context = {}
-    return render(request, 'library/user-side/login.html')
+class UserLoginView(LoginView):
+    template_name = 'library/user-side/login.html'
+    redirect_authenticated_user = 'homepage'
+
+class UserLogoutView(LogoutView):
+    ...

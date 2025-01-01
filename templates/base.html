@@ -54,7 +54,14 @@
             <a href="">اخبار</a>
           </div>
           <div class="text-center w-full text-blue-500 hover:text-blue-600">
+            {% if user.is_authenticated %}
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">خروج</button>
+              </form>
+            {% else %}
             <a href="{% url 'login' %}">ورود</a>
+            {% endif %}
           </div>
         </div>
       </div>
