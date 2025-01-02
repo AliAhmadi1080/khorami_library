@@ -6,11 +6,12 @@
   <div class="flex flex-col md:mr-20">
     <h1 class="text-xl">پیشنهادات</h1>
     <div class="flex flex-col md:flex-row items-center justify-items-center">
+      {% for post in posts %}
       <div class="mx-5 my-5">
         <figure
           class="relative max-w-sm transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0"
         >
-          <a href="#">
+          <a href="{% url 'see_post' post_id=post.id %}">
             <img
               class="rounded-lg"
               src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png"
@@ -18,144 +19,36 @@
             />
           </a>
           <figcaption class="absolute px-4 text-lg text-white bottom-6">
-            <p>اولین اخبار کتابخانه</p>
+            <p>{{post.title}}</p>
           </figcaption>
         </figure>
       </div>
-      <div class="mx-5 my-5">
-        <figure
-          class="relative max-w-sm transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0"
-        >
-          <a href="#">
-            <img
-              class="rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png"
-              alt="image description"
-            />
-          </a>
-          <figcaption class="absolute px-4 text-lg text-white bottom-6">
-            <p>اولین اخبار کتابخانه</p>
-          </figcaption>
-        </figure>
-      </div>
-      <div class="mx-5 my-5">
-        <figure
-          class="relative max-w-sm transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0"
-        >
-          <a href="#">
-            <img
-              class="rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png"
-              alt="image description"
-            />
-          </a>
-          <figcaption class="absolute px-4 text-lg text-white bottom-6">
-            <p>اولین اخبار کتابخانه</p>
-          </figcaption>
-        </figure>
-      </div>
-      <div class="mx-5 my-5">
-        <figure
-          class="relative max-w-sm transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0"
-        >
-          <a href="#">
-            <img
-              class="rounded-lg"
-              src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/content/content-gallery-3.png"
-              alt="image description"
-            />
-          </a>
-          <figcaption class="absolute px-4 text-lg text-white bottom-6">
-            <p>اولین اخبار کتابخانه</p>
-          </figcaption>
-        </figure>
-      </div>
+      {% endfor %}
     </div>
   </div>
   <div class="flex flex-col md:mr-20">
     <h1 class="text-xl">کتاب های جدید</h1>
 
-    <ul class="max-w-md divide-y mt-10 divide-gray-200 dark:divide-gray-700">
+    <ul class="divide-y mt-10 divide-gray-200 dark:divide-gray-700">
+      {% for book in books %}
       <li class="pb-3 sm:pb-4">
         <div class="flex items-center space-x-4 rtl:space-x-reverse">
-          <div class="flex-1 flex min-w-0">
+          <div class="flex-1 min-w-0">
             <p
               class="text-lg font-medium mx-5 text-gray-900 truncate dark:text-white"
             >
-              کتاب قصه های محید
+              {{ book.name }}
             </p>
+            <br />
             <p
               class="text-sm text-gray-500 mt-1 mx-5 truncate dark:text-gray-400"
             >
-              کد:100دب
+              {{book.code}}
             </p>
           </div>
         </div>
       </li>
-      <li class="pb-3 sm:pb-4">
-        <div class="flex items-center space-x-4 rtl:space-x-reverse">
-          <div class="flex-1 flex min-w-0">
-            <p
-              class="text-lg font-medium mx-5 text-gray-900 truncate dark:text-white"
-            >
-              کتاب قصه های محید
-            </p>
-            <p
-              class="text-sm text-gray-500 mt-1 mx-5 truncate dark:text-gray-400"
-            >
-              کد:100دب
-            </p>
-          </div>
-        </div>
-      </li>
-      <li class="pb-3 sm:pb-4">
-        <div class="flex items-center space-x-4 rtl:space-x-reverse">
-          <div class="flex-1 flex min-w-0">
-            <p
-              class="text-lg font-medium mx-5 text-gray-900 truncate dark:text-white"
-            >
-              کتاب قصه های محید
-            </p>
-            <p
-              class="text-sm text-gray-500 mt-1 mx-5 truncate dark:text-gray-400"
-            >
-              کد:100دب
-            </p>
-          </div>
-        </div>
-      </li>
-      <li class="pb-3 sm:pb-4">
-        <div class="flex items-center space-x-4 rtl:space-x-reverse">
-          <div class="flex-1 flex min-w-0">
-            <p
-              class="text-lg font-medium mx-5 text-gray-900 truncate dark:text-white"
-            >
-              کتاب قصه های محید
-            </p>
-            <p
-              class="text-sm text-gray-500 mt-1 mx-5 truncate dark:text-gray-400"
-            >
-              کد:100دب
-            </p>
-          </div>
-        </div>
-      </li>
-      <li class="pb-3 sm:pb-4">
-        <div class="flex items-center space-x-4 rtl:space-x-reverse">
-          <div class="flex-1 flex min-w-0">
-            <p
-              class="text-lg font-medium mx-5 text-gray-900 truncate dark:text-white"
-            >
-              کتاب قصه های محید
-            </p>
-            <p
-              class="text-sm text-gray-500 mt-1 mx-5 truncate dark:text-gray-400"
-            >
-              کد:100دب
-            </p>
-          </div>
-        </div>
-      </li>
+      {% endfor %}
     </ul>
   </div>
 </main>

@@ -51,7 +51,7 @@
             <a href="{% url 'homepage' %}">خانه</a>
           </div>
           <div class="text-center w-full text-blue-500 hover:text-blue-600">
-            <a href="">اخبار</a>
+            <a href="{% url 'see_all_posts' %}">اخبار</a>
           </div>
           <div class="text-center w-full text-blue-500 hover:text-blue-600">
             {% if user.is_authenticated %}

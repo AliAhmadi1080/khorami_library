@@ -2,8 +2,9 @@ from django.urls import path
 from django.contrib.auth import views
 from .views import (import_pdf_file, dashbord, undo_loan,
                     home_page, create_user, create_loan, search_books,
-                    UserLoginView, search_book, create_post, create_category,
-                    see_posts, edit_post,
+                    UserLoginView, search_book, create_post,
+                    create_category, see_posts, edit_post,
+                    see_post, see_all_posts,
                     )
 
 urlpatterns = [
@@ -22,6 +23,8 @@ urlpatterns = [
     path('', home_page, name='homepage'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
+    path('see_post/<int:post_id>', see_post, name='see_post'),
+    path('see_all_posts/', see_all_posts, name='see_all_posts'),
     path('search_book/', search_book, name='search_book'),
 
 ]

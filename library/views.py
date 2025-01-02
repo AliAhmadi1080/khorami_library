@@ -48,15 +48,22 @@ def handle_uploaded_file(f):
     df = pd.DataFrame(rows_list[1:], columns=rows_list[0])
     df.columns = ['code', "name", 'row_number']
     for index, row in df.iterrows():
-        code_number = row['code'].split('.')[0].zfill(4)
+        code_number = row['code'].split('.')[0].zfill(4).strip()
+
         code_char = '.'.join(row['code'].split('.')[1:][::-1]).strip()
+
         code = code_number + \
-            code_char if not (code_number == '0000' or code_char == '') else ''
-        code = code.replace(' ', '')
+            code_char if not (code_number == '0000'
+                              or code_char == '') else ''
+        code = code.replace(' ', '').strip()
+
+        if code == '' or row['name'] == '':
+            continue
         try:
             book = Book.objects.create(
                 name=row['name'], code=code,
                 row_number=int(row['row_number']))
+            book.save()
         except:
             pass
 
@@ -127,8 +134,22 @@ def create_user(request: HttpRequest):
 
 
 def home_page(request: HttpRequest):
-    context = {}
+    five_last_posts = Post.objects.all().order_by('-id')[:4]
+    five_last_books = Book.objects.all().order_by('-id')[:5]
+    context = {'posts': five_last_posts, 'books': five_last_books}
     return render(request, 'library/user-side/homepage.html', context)
+
+
+def see_post(request: HttpRequest, post_id: int):
+    post = get_object_or_404(Post, id=post_id)
+    context = {'post': post}
+    return render(request, 'library/user-side/see_post.html', context)
+
+
+def see_all_posts(request: HttpRequest):
+    posts = Post.objects.all()
+    context = {'posts': posts}
+    return render(request, 'library/user-side/see_all_posts.html', context)
 
 
 def search_book(request: HttpRequest):
