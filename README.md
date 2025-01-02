@@ -31,44 +31,38 @@ This is a Django-based library management system for managing books, users, and 
 ## Installation
 
 1. Clone the repository:
-
-   ```sh
-   git clone <repository-url>
-   cd <repository-directory>
-   ```
+    ```sh
+    git clone https://github.com/AliAhmadi1080/khorami_library
+    cd khorami_library
+    ```
 
 2. Create and activate a virtual environment:
-
-   ```sh
-   python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-   ```
+    ```sh
+    python -m venv venv
+    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+    ```
 
 3. Install the dependencies:
-
-   ```sh
-   pip install -r requirements.txt
-   ```
+    ```sh
+    pip install -r requirements.txt
+    ```
 
 4. Apply migrations:
-
-   ```sh
-   python manage.py migrate
-   ```
+    ```sh
+    python manage.py migrate
+    ```
 
 5. Create a superuser:
-
-   ```sh
-   python manage.py createsuperuser
-   ```
+    ```sh
+    python manage.py createsuperuser
+    ```
 
 6. Run the development server:
+    ```sh
+    python manage.py runserver
+    ```
 
-   ```sh
-   python manage.py runserver
-   ```
-
-7. Access the application at [http://127.0.0.1:8000/](http://_vscodecontentref_/31).
+7. Access the application at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
 
 ## Usage
 
