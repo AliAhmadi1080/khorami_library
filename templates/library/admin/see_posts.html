@@ -12,11 +12,19 @@
       </tr>
     </thead>
     <tbody>
-      {% for post in posts %}
+      <a href="{% url 'create_post' %}">
+        ایجاد پست جدید
+        <h2 class="text-lg text-gray-500 font-light text-center mt-6">
+          ایجاد پست جدید؟
+        </h2>
+      </a>
 
+      {% for post in posts %}
       <tr>
         <td class="py-2 px-4 border-b">
-          <a href="{% url 'edit_post' post_id=post.id %}"> {{forloop.counter}}</a>
+          <a href="{% url 'edit_post' post_id=post.id %}">
+            {{forloop.counter}}</a
+          >
         </td>
 
         <td class="py-2 px-4 border-b">{{post.title}}</td>

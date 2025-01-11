@@ -198,7 +198,7 @@ def undo_loan(request: HttpRequest, loan_id: int):
     loan = get_object_or_404(Loan, id=loan_id)
     loan.is_return = True
     loan.save()
-    return HttpResponse('all is right')
+    return redirect('successful')
 
 
 @superuser_required
