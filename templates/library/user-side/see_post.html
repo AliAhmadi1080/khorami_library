@@ -1,4 +1,10 @@
-{% extends 'base.html' %} {% block maincontent %}
+{% extends 'base.html' %}
+
+{% block title %}
+    {{post.title}}
+    
+{% endblock title %}
+     {% block maincontent %}
 <div class="mt-28">
   <h1 class="text-2xl text-center text-blue-500">پست "{{post.title}}"</h1>
   <br />
