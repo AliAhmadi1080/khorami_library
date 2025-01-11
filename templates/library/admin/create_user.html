@@ -1,16 +1,31 @@
 {% extends 'adminbase.html' %} {% block createuser.html-style %} active-nav-link
 opacity-100 {% endblock createuser.html-style %} {% block title %} ایجاد عضو
 جدید {% endblock title %} {% block heading %} ایجاد عضو جدید کتابخانه {%endblock heading %} {% block maincontent %}
-
 {% if error is not None %}
-<div class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
-    <span class="font-medium">خطا</span> {{error}}
+<div
+  class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+  role="alert"
+>
+  <span class="font-medium">خطا</span> {{error}}
 </div>
 {% endif %}
-    
 
+
+{% if created_user%}
+    <div
+      class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400"
+      role="alert"
+    >
+    
+      <span class="sr-only"></span>
+      <div>
+        نام کاربری جدید:{{created_user.username}} و رمز عبور:{{pass}}
+      </div>
+    </div>
+{% endif %}
+    
 <form class="max-w-sm" action="" method="POST">
-    {% csrf_token %}
+  {% csrf_token %}
   <div>
     <label
       for="small-input"
@@ -53,15 +68,15 @@ opacity-100 {% endblock createuser.html-style %} {% block title %} ایجاد ع
       required
       class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
     >
-      {% for i in form.classname %}
-      
-      {{i}}
-        
-      {% endfor %}
+      {% for i in form.classname %} {{i}} {% endfor %}
     </select>
-
   </div>
-  <button type="submit" class="text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">ذخیره کاربر</button>
+  <button
+    type="submit"
+    class="text-white mt-4 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+  >
+    ذخیره کاربر
+  </button>
 </form>
 
 {% endblock maincontent %}

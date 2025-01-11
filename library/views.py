@@ -126,8 +126,11 @@ def create_user(request: HttpRequest):
                 username=fullname+last_id, fullname=fullname,
                 classname=classname, joined_number=joined_number)
 
-            user.set_password(str(int(joined_number)*2+3))
+            user.set_password(str(int(joined_number)*2+3)+str(int(joined_number)*2+3)+str(int(joined_number)**2**3))
             user.save()
+            print(user)
+            context['created_user'] = user
+            context['pass'] = str(int(joined_number)*2+3)+str(int(joined_number)*2+3)+str(int(joined_number)**2**3)
         except BaseException as e:
             context['error'] = 'این شماره عضویت وجود دارد'
 
