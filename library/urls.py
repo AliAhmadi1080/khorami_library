@@ -5,7 +5,9 @@ from .views import (import_pdf_file, dashboard, undo_loan,
                     UserLoginView, search_book, create_post,
                     create_category, see_posts, edit_post,
                     see_post, see_all_posts, admin_dashboard, see_borrowed_books,
-                    see_requests, successful, create_request
+                    see_requests, successful, create_request, admin_see_requests,
+                    accepte_request, reject_request
+
                     )
 
 urlpatterns = [  # Todo: create another path for the admin side
@@ -20,6 +22,12 @@ urlpatterns = [  # Todo: create another path for the admin side
     path('admin/create_category/', create_category, name='create_category'),
     path('admin/see_posts/', see_posts, name='see_posts'),
     path('admin/edit_post/<int:post_id>', edit_post, name='edit_post'),
+    path('admin/accepte_request/<int:request_id>',
+         accepte_request, name='accepte_request'),
+    path('admin/reject_request/<int:request_id>',
+         reject_request, name='reject_request'),
+    path('admin/edit_post/<int:post_id>', edit_post, name='edit_post'),
+    path('admin/see_requests/', admin_see_requests, name='admin_see_requests'),
     # user side
     path('', home_page, name='homepage'),
     path('login/', UserLoginView.as_view(), name='login'),

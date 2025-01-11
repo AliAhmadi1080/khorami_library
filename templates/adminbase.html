@@ -120,6 +120,13 @@
           <i class="fa fa-address-book mr-3 m-2"></i>
           پست ها
         </a>
+        <a
+          href="{% url 'admin_see_requests' %}"
+          class="flex items-center text-white opacity-75 {% block see_requests.html-style %} {% endblock see_requests.html-style %} hover:opacity-100 py-2 pl-4 nav-item"
+        >
+          <i class="fa fa-question-circle mr-3 m-2"></i>
+          مشهاده همه درخواست ها
+        </a>
       </nav>
     </aside>
     <div class="w-full flex flex-col h-screen overflow-y-hidden">
@@ -203,6 +210,13 @@
             class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item"
           >
             <i class="fa fa-search mr-3 m-2"></i>
+            مشهاده همه درخواست ها
+          </a>
+          <a
+            href="{% url 'admin_see_requests' %}"
+            class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item"
+          >
+            <i class="fa fa-question-circle mr-3 m-2"></i>
             جست و جو
           </a>
         </nav>
