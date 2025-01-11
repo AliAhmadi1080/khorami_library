@@ -80,7 +80,7 @@
         {% if is_return %} {% endif %}
 
         <td class="py-2 px-4 border-b">
-          {% if not Loan.is_return %}
+          {% if not Loan.is_return %}<!--create a template for it-->
           <a
             href="{% url 'undo_return' Loan.id %}"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"

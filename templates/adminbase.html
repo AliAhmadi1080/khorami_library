@@ -67,8 +67,8 @@
       </div>
       <nav class="text-white text-base font-semibold pt-3">
         <a
-          href="{% url 'dashbord' %}"
-          class="flex items-center text-white opacity-75 {% block dashbord.html-style %} {% endblock dashbord.html-style %} hover:opacity-100 py-2 pl-4 nav-item"
+          href="{% url 'admin_dashboard' %}"
+          class="flex items-center text-white opacity-75 {% block dashboard.html-style %} {% endblock dashboard.html-style %} hover:opacity-100 py-2 pl-4 nav-item"
         >
           <i class="fas fa-tachometer-alt mr-3 m-2"></i>
           داشبورد
@@ -143,7 +143,7 @@
       >
         <div class="flex items-center justify-between">
           <a
-            href="{% url 'dashbord' %}"
+            href="{% url 'admin_dashboard' %}"
             class="text-white text-3xl font-semibold uppercase hover:text-gray-300"
             >پنل کتابخانه</a
           >
@@ -159,7 +159,7 @@
         <!-- Dropdown Nav -->
         <nav :class="isOpen ? 'flex': 'hidden'" class="flex flex-col pt-4">
           <a
-            href="{% url 'dashbord' %}"
+            href="{% url 'admin_dashboard' %}"
             class="flex items-center text-white opacity-75 hover:opacity-100 py-2 pl-4 nav-item"
           >
             <i class="fas fa-tachometer-alt mr-3 m-2"></i>
