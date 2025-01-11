@@ -1,13 +1,14 @@
 from django.contrib.auth.decorators import user_passes_test
-from .forms import BookSearchForm, PostForm, CategoryForm
+from django.contrib.auth.decorators import login_required
+from .models import Book, Loan, Category, Post, Request
 from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404
-from .models import Book, Loan, Category, Post
+from django.shortcuts import render, redirect
+from .forms import BookSearchForm, PostForm
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
 from account.models import CustomUser
 from django.http import HttpResponse
-from django.shortcuts import render
 from datetime import datetime
 from .forms import LoanForm
 import pandas as pd
@@ -95,7 +96,7 @@ def import_pdf_file(request: HttpRequest):
 
 
 @superuser_required
-def dashbord(request: HttpRequest):
+def admin_dashboard(request: HttpRequest):
     today_date = datetime.now()
     unforce_return = Loan.objects.filter(
         is_return=False)
@@ -106,7 +107,7 @@ def dashbord(request: HttpRequest):
 
     context = {'force_return': force_return,
                'unforce_return': unforce_return, }
-    return render(request, 'library/admin/dashbord.html', context)
+    return render(request, 'library/admin/dashboard.html', context)
 
 
 @superuser_required
@@ -200,6 +201,7 @@ def undo_loan(request: HttpRequest, loan_id: int):
     return HttpResponse('all is right')
 
 
+@superuser_required
 def search_books(request: HttpRequest):
     form = BookSearchForm(request.GET or None)
     context = {'form': form}
@@ -228,6 +230,7 @@ class UserLoginView(LoginView):
     redirect_authenticated_user = 'homepage'
 
 
+@superuser_required
 def create_post(request: HttpRequest):
     form = PostForm()
     if request.method == "POST":
@@ -238,6 +241,7 @@ def create_post(request: HttpRequest):
     return render(request, 'library/admin/create_post.html', context)
 
 
+@superuser_required
 def edit_post(request: HttpRequest, post_id):
 
     post = get_object_or_404(Post, id=post_id)
@@ -262,12 +266,14 @@ def edit_post(request: HttpRequest, post_id):
     return render(request, 'library/admin/edit_post.html', context)
 
 
+@superuser_required
 def see_posts(request):
     posts = Post.objects.all()
     context = {'posts': posts}
     return render(request, 'library/admin/see_posts.html', context)
 
 
+@superuser_required
 def create_category(request: HttpRequest):
     if request.method == "POST":
         name = request.POST['name']
@@ -275,3 +281,57 @@ def create_category(request: HttpRequest):
         category.save()
     context = {}
     return render(request, 'library/admin/create_category.html', context)
+
+
+@login_required
+def dashboard(request: HttpRequest):
+    borrowed_books = Loan.objects.filter(
+        user=request.user).count()
+    unreturned_books_list = Loan.objects.filter(
+        user=request.user, is_return=False)
+    context = {"borrowed_books": borrowed_books,
+               "unreturned_books_list": unreturned_books_list}
+    return render(request, 'library/user-side/dashboard.html', context)
+
+
+@login_required
+def see_borrowed_books(request: HttpRequest):
+    borrowed_books = Loan.objects.filter(
+        user=request.user).count()
+    unreturned_books_list = Loan.objects.filter(
+        user=request.user, is_return=False)
+    context = {"borrowed_books": borrowed_books,
+               "unreturned_books_list": unreturned_books_list}
+    return render(request, 'library/user-side/see_borrowed_books.html', context)
+
+
+@login_required
+def see_requests(request: HttpRequest):
+    requests = Request.objects.all()
+    processing_requests = requests.filter(status='processing').count()
+    accepted_requests = requests.filter(status='accepted').count()
+    unaccepted_requests = requests.filter(status='rejected').count()
+    
+    
+    requests = requests[:10]
+    context = {}
+    context['requests'] = requests
+    context['processing_requests'] = processing_requests
+    context['accepted_requests'] = accepted_requests
+    context['unaccepted_requests'] = unaccepted_requests
+    return render(request, 'library/user-side/see_requests.html', context)
+
+
+def successful(request: HttpRequest):
+    context = {}
+    return render(request, 'successful.html', context)
+
+
+@login_required
+def create_request(http_request: HttpRequest, loan_id: int = None):
+    loan = get_object_or_404(Loan, id=loan_id)
+    loan.have_request = True
+    loan.save()
+    request = Request.objects.create(loan=loan)
+    request.save()
+    return redirect('successful')

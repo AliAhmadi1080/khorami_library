@@ -1,24 +1,25 @@
 from django.urls import path
 from django.contrib.auth import views
-from .views import (import_pdf_file, dashbord, undo_loan,
+from .views import (import_pdf_file, dashboard, undo_loan,
                     home_page, create_user, create_loan, search_books,
                     UserLoginView, search_book, create_post,
                     create_category, see_posts, edit_post,
-                    see_post, see_all_posts,
+                    see_post, see_all_posts, admin_dashboard, see_borrowed_books,
+                    see_requests, successful, create_request
                     )
 
-urlpatterns = [
+urlpatterns = [  # Todo: create another path for the admin side
     path("account/login/", views.LoginView.as_view(), name="admin_login"),
-    path('import_file/', import_pdf_file, name='import_excle_file'),
-    path('dashbord/', dashbord, name='dashbord'),
-    path('create_post/', create_post, name='create_post'),
-    path('undo_return/<int:loan_id>', undo_loan, name='undo_return'),
-    path('create_loan/', create_loan, name='create_loan'),
-    path('create_user/', create_user, name='create_user'),
-    path('search_books/', search_books, name='search_books'),
-    path('create_category/', create_category, name='create_category'),
-    path('see_posts/', see_posts, name='see_posts'),
-    path('edit_post/<int:post_id>', edit_post, name='edit_post'),
+    path('admin/import_file/', import_pdf_file, name='import_excle_file'),
+    path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
+    path('admin/create_post/', create_post, name='create_post'),
+    path('admin/undo_return/<int:loan_id>', undo_loan, name='undo_return'),
+    path('admin/create_loan/', create_loan, name='create_loan'),
+    path('admin/create_user/', create_user, name='create_user'),
+    path('admin/search_books/', search_books, name='search_books'),
+    path('admin/create_category/', create_category, name='create_category'),
+    path('admin/see_posts/', see_posts, name='see_posts'),
+    path('admin/edit_post/<int:post_id>', edit_post, name='edit_post'),
     # user side
     path('', home_page, name='homepage'),
     path('login/', UserLoginView.as_view(), name='login'),
@@ -26,5 +27,10 @@ urlpatterns = [
     path('see_post/<int:post_id>', see_post, name='see_post'),
     path('see_all_posts/', see_all_posts, name='see_all_posts'),
     path('search_book/', search_book, name='search_book'),
+    path('dashboard/', dashboard, name='dashboard'),
+    path('see_borrowed_books/', see_borrowed_books, name='see_borrowed_books'),
+    path('see_requests/', see_requests, name='see_requests'),
+    path('create_request/<int:loan_id>', create_request, name='create_request'),
+    path('successful/', successful, name='successful'),
 
 ]

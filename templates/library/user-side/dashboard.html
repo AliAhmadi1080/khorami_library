@@ -1,0 +1,138 @@
+{% extends 'library/user-side/dashboardbase.html' %}
+{% block dashboard.html-style %}
+flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25
+{% endblock dashboard.html-style %}
+     {% block headname %}
+داشبورد {% endblock headname %} {% block header %}
+<div class="flex flex-wrap -mx-6">
+  <div class="w-full px-6 sm:w-1/2 xl:w-1/3">
+    <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+      <div class="p-3 bg-indigo-600 bg-opacity-75 rounded-full">
+        <img
+          width="46"
+          height="46"
+          src="https://img.icons8.com/material-sharp/46/user.png"
+          alt="user"
+        />
+      </div>
+
+      <div class="mx-5">
+        <h4 class="text-2xl font-semibold text-gray-700">نام شما</h4>
+        <div class="text-gray-500">{{user.fullname}}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 sm:mt-0">
+    <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+      <div class="p-3 bg-pink-600 bg-opacity-75 rounded-full">
+        <img
+          width="46"
+          height="46"
+          src="https://img.icons8.com/ios/100/book--v1.png"
+          alt="book--v1"
+        />
+      </div>
+
+      <div class="mx-5">
+        <h4 class="text-2xl font-semibold text-gray-700">{{borrowed_books}}</h4>
+        <div class="text-gray-500">قرض گرفته شده</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="w-full px-6 mt-6 sm:w-1/2 xl:w-1/3 xl:mt-0">
+    <div class="flex items-center px-5 py-6 bg-white rounded-md shadow-sm">
+      <div class="p-3 bg-pink-600 bg-opacity-75 rounded-full">
+        <img
+          width="46"
+          height="46"
+          src="https://img.icons8.com/ios/46/open-book--v1.png"
+          alt="open-book--v1"
+        />
+      </div>
+
+      <div class="mx-5">
+        <h4 class="text-2xl font-semibold text-gray-700">
+          {{unreturned_books_list.count}}
+        </h4>
+        <div class="text-gray-500">کتاب برگردانده نشده</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock header %} {% block maincontent %}
+
+<div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+  <h3 class="text-xl">کتاب برگردانده نشده</h3>
+  <br />
+  <div
+    class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
+  >
+    <table class="min-w-full">
+      <thead>
+        <tr>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            اسم کتاب
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            کد کتاب
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            تاریخ بازگشت
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          ></th>
+        </tr>
+      </thead>
+
+      <tbody class="bg-white">
+        {% for unreturned_book in unreturned_books_list %}
+        <tr>
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{unreturned_book.book.name}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{unreturned_book.book.code}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{unreturned_book.return_date}}
+          </td>
+
+          <td
+            class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200"
+          >
+            {% if not unreturned_book.have_request %}
+            <!--create a template for it--><a
+              href="{% url 'create_request' loan_id=unreturned_book.id %}"
+              class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
+            >
+              درخواست تمدید زمان
+            </a>
+            {% else %}
+            <button
+            disabled
+            class="bg-gray-400 text-white font-bold py-1 px-4 rounded cursor-not-allowed"
+          >
+            درخواست ارسال شده است
+          </button>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock maincontent %}

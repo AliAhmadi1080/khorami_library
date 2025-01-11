@@ -20,6 +20,7 @@ class Loan(models.Model):
     loan_date = jmodels.jDateField('تاریخ تحویل', auto_now_add=True)
     return_date = jmodels.jDateField('تاریخ بازگشت')
     is_return = models.BooleanField(default=False)
+    have_request = models.BooleanField(default=False)
     notes = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -40,3 +41,28 @@ class Post(models.Model):
     created_on = jmodels.jDateField(auto_now_add=True)
     last_modified = jmodels.jDateField(auto_now=True)
     categories = models.ManyToManyField(Category, related_name="posts")
+
+
+class Request(models.Model):
+    PROCESSING = 'processing'
+    REJECTED = 'rejected'
+    ACCEPTED = 'accepted'
+
+    STATUS_CHOICES = [
+        (PROCESSING, 'در حال پردازش'),
+        (REJECTED, 'رد درخواست'),
+        (ACCEPTED, 'پذیرش درخواست'),
+    ]
+
+    status = models.CharField(
+        max_length=10,
+        choices=STATUS_CHOICES,
+        default=PROCESSING,  # مقدار پیش‌فرض
+    )
+    loan = models.ForeignKey(Loan, on_delete=models.CASCADE)
+    request_date = jmodels.jDateField('تاریخ درخواست', auto_now_add=True)
+    notes = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user} کتاب {self.book} را در \
+            تاریخ {self.request_date} درخواست داده است."

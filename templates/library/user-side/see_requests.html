@@ -1,0 +1,61 @@
+
+{% extends 'library/user-side/dashboardbase.html' %}
+
+{% block see_requests.html-style %}flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25  {% endblock see_requests.html-style %}
+
+{% block headname %}
+وضعیت درخواست‌ها
+{% endblock headname %}
+
+{% block header %}
+<h2 class="text-xl font-semibold mb-4">
+    <span class="text-red-500">تعداد درخواست‌های رد شده:</span> {{ unaccepted_requests }} |
+    <span class="text-green-500">تعداد درخواست‌های قبول شده:</span> {{ accepted_requests }} |
+    <span class="text-blue-500">تعداد درخواست‌های بررسی نشده:</span> {{ processing_requests }}
+</h2>
+
+{% endblock header %}
+  {% block maincontent %}
+<div class="mt-8">
+  <h2 class="text-2xl font-semibold text-gray-800 mb-4">نتایج درخواست ها:</h2>
+  <table
+    class="min-w-full bg-white text-right border border-gray-200 rounded-lg shadow"
+  >
+    <thead>
+      <tr>
+        <th class="py-2 px-4 border-b">#</th>
+        <th class="py-2 px-4 border-b">نام کتاب</th>
+        <th class="py-2 px-4 border-b">کد کتاب</th>
+        <th class="py-2 px-4 border-b">تاریخ تحویل</th>
+        <th class="py-2 px-4 border-b">وضعیت</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for request in requests %}
+      <tr>
+        <td class="py-2 px-4 border-b">{{forloop.counter}}</td>
+        <td class="py-2 px-4 border-b">{{request.loan.book.name}}</td>
+        <td class="py-2 px-4 border-b">{{request.loan.book.code}}</td>
+        <td>{{request.loan.return_date}}</td>
+        {% if request.status == "processing" %}
+        <td class="py-2 px-4 border-b">
+            درحال پردازش
+          </td>
+        {% elif request.status == "rejected" %}
+        <td class="py-2 px-4 border-b">
+            رد درخواست
+          </td>
+        {% elif request.status == "accepted" %}
+        <td class="py-2 px-4 border-b">
+            پذیرش درخواست
+          </td>
+
+        {% endif %}
+
+        
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
