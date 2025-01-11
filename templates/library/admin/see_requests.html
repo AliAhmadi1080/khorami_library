@@ -1,0 +1,64 @@
+{% extends 'adminbase.html' %}
+
+
+{% block heading %}
+    مشهاده همه درخواست ها
+{% endblock heading %}
+    
+
+{% block see_requests.html-style %} active-nav-link opacity-100 {% endblock see_requests.html-style %}
+
+
+{% block maincontent %}
+<table
+class="min-w-full bg-white text-right border border-gray-200 rounded-lg shadow"
+>
+<thead>
+  <tr>
+    <th class="py-2 px-4 border-b">#</th>
+    <th class="py-2 px-4 border-b">نام شخص عضو</th>
+    <th class="py-2 px-4 border-b">اسم کتاب</th>
+    <th class="py-2 px-4 border-b">کد</th>
+    <th class="py-2 px-4 border-b">تاریخ درخواست</th>
+    <th class="py-2 px-4 border-b"></th>
+  </tr>
+</thead>
+<tbody>
+ 
+  
+  {% for request in requests %}
+    <tr>
+      <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
+      <td class="py-2 px-4 border-b">{{ request.loan.user.fullname }}</td>
+      <td class="py-2 px-0 border-b">{{ request.loan.book.name }}</td>
+      <td class="py-2 px-4 border-b">{{ request.loan.book.code }}</td>
+  
+      
+  
+      <td class="py-2 px-4 border-b">{{ request.request_date }}</td>    
+      <td class="py-2 px-4 border-b flex flex-col">
+        
+        <a
+          href="{% url 'accepte_request' request.id %}"
+          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
+        >
+          قبول کردن
+        </a>
+        <a
+          href="{% url 'reject_request' request.id %}"
+          class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded"
+        >
+          رد کردن
+        </a>
+        
+    
+    
+      </td>
+    </tr>
+  {% endfor %}
+    
+  
+</tbody>
+</table>
+{% endblock maincontent %}
+    

@@ -225,6 +225,30 @@ def search_books(request: HttpRequest):
     return render(request, 'library/admin/search_books.html', context)
 
 
+@superuser_required
+def admin_see_requests(request: HttpRequest):
+    requests = Request.objects.all().filter(status='processing')
+    context = {}
+    context['requests'] = requests
+    return render(request, 'library/admin/see_requests.html', context)
+
+
+@superuser_required
+def accepte_request(request: HttpRequest, request_id: int):
+    request:Request = get_object_or_404(Request, id=request_id)
+    request.status = 'accepted'
+    request.save()
+    return redirect('successful')
+
+
+@superuser_required
+def reject_request(request: HttpRequest, request_id: int):
+    request:Request = get_object_or_404(Request, id=request_id)
+    request.status = 'rejected'
+    request.save()
+    return redirect('successful')
+
+
 class UserLoginView(LoginView):
     template_name = 'library/user-side/login.html'
     redirect_authenticated_user = 'homepage'
@@ -311,8 +335,7 @@ def see_requests(request: HttpRequest):
     processing_requests = requests.filter(status='processing').count()
     accepted_requests = requests.filter(status='accepted').count()
     unaccepted_requests = requests.filter(status='rejected').count()
-    
-    
+
     requests = requests[:10]
     context = {}
     context['requests'] = requests
