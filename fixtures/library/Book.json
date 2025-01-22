@@ -1,0 +1,20 @@
+[
+    {
+        "model": "library.book",
+        "pk": 1,
+        "fields": {
+            "name": "Python Programming",
+            "code": "001.PY",
+            "row_number": 1
+        }
+    },
+    {
+        "model": "library.book",
+        "pk": 2,
+        "fields": {
+            "name": "Django for Beginners",
+            "code": "002.DJ",
+            "row_number": 2
+        }
+    }
+]

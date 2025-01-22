@@ -1,0 +1,12 @@
+[
+    {
+        "model": "library.request",
+        "pk": 1,
+        "fields": {
+            "status": "processing",
+            "loan": 1,
+            "request_date": "1402-01-01",
+            "notes": "First request"
+        }
+    }
+]

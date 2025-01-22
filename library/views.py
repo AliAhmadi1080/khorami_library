@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.decorators import login_required
 from .models import Book, Loan, Category, Post, Request
+from django.db.models import Case, When, IntegerField
 from django.contrib.auth.views import LoginView
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
@@ -9,6 +10,7 @@ from django.http.request import HttpRequest
 from account.forms import CustomUserForm
 from account.models import CustomUser
 from django.http import HttpResponse
+from datetime import timedelta
 from datetime import datetime
 from .forms import LoanForm
 import pandas as pd
@@ -125,12 +127,12 @@ def create_user(request: HttpRequest):
 
                 username=fullname+last_id, fullname=fullname,
                 classname=classname, joined_number=joined_number)
+            password = str(int(joined_number)*2+3)+str(int(joined_number)*2+CustomUser.objects.last())
 
-            user.set_password(str(int(joined_number)*2+3)+str(int(joined_number)*2+3)+str(int(joined_number)**2**3))
+            user.set_password(password)
             user.save()
-            print(user)
             context['created_user'] = user
-            context['pass'] = str(int(joined_number)*2+3)+str(int(joined_number)*2+3)+str(int(joined_number)**2**3)
+            context['pass'] = password
         except BaseException as e:
             context['error'] = 'این شماره عضویت وجود دارد'
 
@@ -238,7 +240,11 @@ def admin_see_requests(request: HttpRequest):
 
 @superuser_required
 def accepte_request(request: HttpRequest, request_id: int):
-    request:Request = get_object_or_404(Request, id=request_id)
+    request: Request = get_object_or_404(Request, id=request_id)
+    loan = request.loan
+    loan.have_request = True
+    loan.return_date = loan.return_date + timedelta(days=7)
+    loan.save()
     request.status = 'accepted'
     request.save()
     return redirect('successful')
@@ -246,7 +252,7 @@ def accepte_request(request: HttpRequest, request_id: int):
 
 @superuser_required
 def reject_request(request: HttpRequest, request_id: int):
-    request:Request = get_object_or_404(Request, id=request_id)
+    request: Request = get_object_or_404(Request, id=request_id)
     request.status = 'rejected'
     request.save()
     return redirect('successful')
@@ -334,17 +340,26 @@ def see_borrowed_books(request: HttpRequest):
 
 @login_required
 def see_requests(request: HttpRequest):
-    requests = Request.objects.all()
+    requests = Request.objects.annotate(
+        custom_order=Case(
+            When(status='processing', then=0),
+            When(status='accepted', then=1),
+            When(status='rejected', then=2),
+            output_field=IntegerField(),
+        )
+    ).order_by('custom_order', 'status')
+
     processing_requests = requests.filter(status='processing').count()
     accepted_requests = requests.filter(status='accepted').count()
     unaccepted_requests = requests.filter(status='rejected').count()
 
     requests = requests[:10]
-    context = {}
-    context['requests'] = requests
-    context['processing_requests'] = processing_requests
-    context['accepted_requests'] = accepted_requests
-    context['unaccepted_requests'] = unaccepted_requests
+    context = {
+        'requests': requests,
+        'processing_requests': processing_requests,
+        'accepted_requests': accepted_requests,
+        'unaccepted_requests': unaccepted_requests,
+    }
     return render(request, 'library/user-side/see_requests.html', context)
 
 

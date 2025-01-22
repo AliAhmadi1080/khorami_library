@@ -1,0 +1,14 @@
+[
+    {
+        "model": "library.loan",
+        "pk": 1,
+        "fields": {
+            "book": 1,
+            "user": 1,
+            "loan_date": "1402-01-01",
+            "return_date": "1402-01-15",
+            "is_return": false,
+            "notes": "First loan"
+        }
+    }
+]

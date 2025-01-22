@@ -1,0 +1,13 @@
+[
+    {
+        "model": "library.post",
+        "pk": 1,
+        "fields": {
+            "title": "Introduction to Python",
+            "body": "This is a post about Python programming.",
+            "created_on": "1402-01-01",
+            "last_modified": "1402-01-01",
+            "categories": [1]
+        }
+    }
+]

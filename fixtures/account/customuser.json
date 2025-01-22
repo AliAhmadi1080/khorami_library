@@ -1,0 +1,30 @@
+[
+    {
+        "model": "account.customuser",
+        "pk": 1,
+        "fields": {
+            "joined_number": 12345,
+            "fullname": "Ali Ahmadi",
+            "classname": "7.1",
+            "username": "aliahmadi",
+            "password": "pbkdf2_sha256$260000$...$...",
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false
+        }
+    },
+    {
+        "model": "account.customuser",
+        "pk": 2,
+        "fields": {
+            "joined_number": 67890,
+            "fullname": "Sara Rezaei",
+            "classname": "8.2",
+            "username": "sararezaei",
+            "password": "pbkdf2_sha256$260000$...$...",
+            "is_active": true,
+            "is_staff": false,
+            "is_superuser": false
+        }
+    }
+]
