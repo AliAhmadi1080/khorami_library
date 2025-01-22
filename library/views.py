@@ -9,7 +9,6 @@ from .forms import BookSearchForm, PostForm
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
 from account.models import CustomUser
-from django.http import HttpResponse
 from datetime import timedelta
 from datetime import datetime
 from .forms import LoanForm
@@ -90,10 +89,26 @@ def superuser_required(function=None, redirect_field_name='next', login_url='/ac
 def import_pdf_file(request: HttpRequest):
     context = {}
     if request.method == 'POST':
-        file = request.FILES["inputfile"]
-        t1 = threading.Thread(target=handle_uploaded_file, args=(file,))
-        t1.start()
-        context['succses'] = True
+        try:
+            file = request.FILES["inputfile"]
+            t1 = threading.Thread(target=handle_uploaded_file, args=(file,))
+            t1.start()
+            context['succses'] = True
+        except:
+            pass
+
+        try:
+            row_number = request.POST["row_number"]
+            print('s')
+            book_name = request.POST["book_name"]
+            book_code = request.POST["book_code"]
+            book = Book.objects.create(
+                name=book_name, row_number=row_number, code=book_code)
+            book.save()
+            context['succses'] = True
+        except:
+            print('h')
+
     return render(request, 'library/admin/inputfile.html', context)
 
 
@@ -127,7 +142,8 @@ def create_user(request: HttpRequest):
 
                 username=fullname+last_id, fullname=fullname,
                 classname=classname, joined_number=joined_number)
-            password = str(int(joined_number)*2+3)+str(int(joined_number)*2+CustomUser.objects.last())
+            password = str(int(joined_number)*2+3) + \
+                str(int(joined_number)*2+CustomUser.objects.last())
 
             user.set_password(password)
             user.save()
