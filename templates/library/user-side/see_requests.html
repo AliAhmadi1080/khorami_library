@@ -40,17 +40,17 @@
         <td class="py-2 px-4 border-b">{{forloop.counter}}</td>
         <td class="py-2 px-4 border-b">{{request.loan.book.name}}</td>
         <td class="py-2 px-4 border-b">{{request.loan.book.code}}</td>
-        <td>{{request.loan.return_date}}</td>
+        <td class="py-2 px-4 border-b">{{request.loan.return_date}}</td>
         {% if request.status == "processing" %}
-        <td class="py-2 px-4 border-b">
+        <td class="py-2 px-4 border-b text-blue-500">
             درحال پردازش
           </td>
         {% elif request.status == "rejected" %}
-        <td class="py-2 px-4 border-b">
+        <td class="py-2 px-4 border-b text-red-500">
             رد درخواست
           </td>
         {% elif request.status == "accepted" %}
-        <td class="py-2 px-4 border-b">
+        <td class="py-2 px-4 border-b text-green-500">
             پذیرش درخواست
           </td>
 
