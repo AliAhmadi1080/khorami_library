@@ -63,6 +63,14 @@
           عملیات با موفقیت انجام شد
         </div>
       </div>
+      {% elif succses == 'false' %}
+      <div class="flex items-center justify-center">
+        <div
+          class="flex mt-4 h-9 px-2 flex-col bg-red-600 rounded-full text-white text-sm items-center justify-center"
+        >
+          عملیات با موفقیت انجام نشد
+        </div>
+      </div>
       {% endif %}
     </form>
   </div>

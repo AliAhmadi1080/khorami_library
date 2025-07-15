@@ -8,67 +8,11 @@ from django.shortcuts import render, redirect
 from .forms import BookSearchForm, PostForm
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
+from .tasks import handle_uploaded_file
 from account.models import CustomUser
 from datetime import timedelta
 from datetime import datetime
 from .forms import LoanForm
-import pandas as pd
-import pdfplumber
-import threading
-
-
-def handle_uploaded_file(f):
-    with open("files/name.pdf", "wb+") as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
-
-    pdf_path = 'files/name.pdf'
-    rows_list = []
-    Book.objects.all().delete()
-    with pdfplumber.open(pdf_path) as pdf:
-        for page in pdf.pages:
-            tables = page.extract_tables()
-            for table in tables:
-                for row in table:
-                    numbetsdone = 0
-                    text = ''
-                    for char in row[1][::-1]:
-                        if not char.isdigit():
-                            text += char
-                            numbetsdone = 0
-                        else:
-                            if numbetsdone == 0:
-                                text += char
-                                numbetsdone += 1
-                            else:
-                                text = text[:-1 * numbetsdone] + \
-                                    char + text[-1 * numbetsdone:]
-                                numbetsdone += 1
-                    row[1] = text
-                    rows_list.append(row)
-
-    df = pd.DataFrame(rows_list[1:], columns=rows_list[0])
-    df.columns = ['code', "name", 'row_number']
-    for index, row in df.iterrows():
-        code_number = row['code'].split('.')[0].zfill(4).strip()
-
-        code_char = '.'.join(row['code'].split('.')[1:][::-1]).strip()
-
-        code = code_number + \
-            code_char if not (code_number == '0000'
-                              or code_char == '') else ''
-        code = code.replace(' ', '').strip()
-
-        if code == '' or row['name'] == '':
-            continue
-        try:
-            book = Book.objects.create(
-                name=row['name'], code=code,
-                row_number=int(row['row_number']))
-            book.save()
-        except:
-            pass
-
 
 def superuser_required(function=None, redirect_field_name='next', login_url='/account/login/'):
     """
@@ -91,15 +35,17 @@ def import_pdf_file(request: HttpRequest):
     if request.method == 'POST':
         try:
             file = request.FILES["inputfile"]
-            t1 = threading.Thread(target=handle_uploaded_file, args=(file,))
-            t1.start()
+            with open("files/name.pdf", "wb+") as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+            handle_uploaded_file.delay()
+
             context['succses'] = True
         except:
             pass
 
         try:
             row_number = request.POST["row_number"]
-            print('s')
             book_name = request.POST["book_name"]
             book_code = request.POST["book_code"]
             book = Book.objects.create(
@@ -107,7 +53,9 @@ def import_pdf_file(request: HttpRequest):
             book.save()
             context['succses'] = True
         except:
-            print('h')
+            pass
+        if not context['succses'] == True:
+            context['succses'] = 'False'
 
     return render(request, 'library/admin/inputfile.html', context)
 

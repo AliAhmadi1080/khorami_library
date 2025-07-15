@@ -4,9 +4,9 @@ from django_jalali.db import models as jmodels
 
 
 class Book(models.Model):
-    name = models.CharField('اسم', max_length=255, null=True, blank=True)
-    code = models.CharField('کد', max_length=255, null=True, blank=True)
-    row_number = models.PositiveBigIntegerField('ردیف', null=True, blank=True)
+    name = models.CharField('اسم', max_length=255)
+    code = models.CharField('کد', max_length=255)
+    row_number = models.PositiveBigIntegerField('ردیف')
 
     def __str__(self) -> str:
         return f'{self.name}--{self.code}'
