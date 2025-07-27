@@ -1,4 +1,5 @@
-{% extends 'adminbase.html' %} {% block head %}
+{% extends 'adminbase.html' %}
+{% load library_filters %} {% block head %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 {% endblock head %}{% block title %} داشبورد {% endblock title %} {% block heading %} داشبورد کتابخانه مدرسه دکتر خرمی {% endblock heading %} {% block dashboard.html-style %} active-nav-link opacity-100 {% endblock dashboard.html-style %} {% block maincontent %}
 <div
@@ -15,6 +16,8 @@
             <th scope="col" class="px-6 py-3">نام دانش آموز</th>
             <th scope="col" class="px-6 py-3">شماره عضویت</th>
             <th scope="col" class="px-6 py-3">تاریخ بازگشت</th>
+            <th scope="col" class="px-6 py-3">امتیاز دانش آموز</th>
+
           </tr>
         </thead>
         <tbody>
@@ -30,6 +33,11 @@
             </th>
             <td class="px-6 py-4">{{loan.user.joined_number}}</td>
             <td class="px-6 py-4 text-red-400">{{loan.return_date}}</td>
+            {% if loan.user|calculate_total_score >= 0 %}
+                <td class="px-6 py-4 text-green-400">{{ loan.user|calculate_total_score }}</td>
+            {% else %}
+                <td class="px-6 py-4 text-red-400">{{ loan.user|calculate_total_score }}</td>
+            {% endif %}
           </tr>
           {% endfor %}
         </tbody>
@@ -45,6 +53,7 @@
             <th scope="col" class="px-6 py-3">نام دانش آموز</th>
             <th scope="col" class="px-6 py-3">شماره عضویت</th>
             <th scope="col" class="px-6 py-3">تاریخ بازگشت</th>
+            <th scope="col" class="px-6 py-3">امتیاز دانش آموز</th>
           </tr>
         </thead>
         <tbody>
@@ -60,6 +69,14 @@
             </th>
             <td class="px-6 py-4">{{loan.user.joined_number}}</td>
             <td class="px-6 py-4 text-blue-600">{{loan.return_date}}</td>
+            
+            {% if loan.user|calculate_total_score >= 0 %}
+                <td class="px-6 py-4 text-green-400">{{ loan.user|calculate_total_score }}</td>
+            {% else %}
+                <td class="px-6 py-4 text-red-400">{{ loan.user|calculate_total_score }}</td>
+            {% endif %}
+                
+            
           </tr>
           {% endfor %}
         </tbody>

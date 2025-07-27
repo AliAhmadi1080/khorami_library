@@ -79,13 +79,19 @@
 
         {% if is_return %} {% endif %}
 
-        <td class="py-2 px-4 border-b">
+        <td class="py-2 px-4 border-b flex justify-between">
           {% if not Loan.is_return %}<!--create a template for it-->
           <a
             href="{% url 'undo_return' Loan.id %}"
             class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
           >
             ثبت بازگشت
+          </a>
+          <a
+            href="{% url 'decrease_score' Loan.id %}"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded"
+          >
+            کاهش امتیاز
           </a>
           {% else %}
           <button

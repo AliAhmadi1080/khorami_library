@@ -6,7 +6,7 @@ from .views import (import_pdf_file, dashboard, undo_loan,
                     create_category, see_posts, edit_post,
                     see_post, see_all_posts, admin_dashboard, see_borrowed_books,
                     see_requests, successful, create_request, admin_see_requests,
-                    accepte_request, reject_request, return_score_entry
+                    accepte_request, reject_request, return_score_entry, decrease_score,
 
                     )
 
@@ -16,6 +16,7 @@ urlpatterns = [  # Todo: create another path for the admin side
     path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
     path('admin/create_post/', create_post, name='create_post'),
     path('admin/undo_return/<int:loan_id>', undo_loan, name='undo_return'),
+    path('admin/decrease_score/<int:loan_id>', decrease_score, name='decrease_score'),
     path('admin/create_loan/', create_loan, name='create_loan'),
     path('admin/create_user/', create_user, name='create_user'),
     path('admin/search_books/', search_books, name='search_books'),
@@ -41,7 +42,7 @@ urlpatterns = [  # Todo: create another path for the admin side
     path('create_request/<int:loan_id>', create_request, name='create_request'),
 
     path('successful/', successful, name='successful'),
-    path('return_score_entry/<int:user_joined_number>', return_score_entry, name='return_score_entry'),
+    path('return_score_entry/<int:joined_number>', return_score_entry, name='return_score_entry'),
 
 
 ]
