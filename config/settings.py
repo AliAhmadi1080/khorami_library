@@ -22,12 +22,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.getenv('SECRET_KEY', 'django-insecure-fb*^u4skz&bij-2l3e&3=z@88@dt-cjwzo90c(h+1t=-&vw+hl')
+SECRET_KEY = os.getenv(
+    'SECRET_KEY', 'django-insecure-fb*^u4skz&bij-2l3e&3=z@88@dt-cjwzo90c(h+1t=-&vw+hl')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -138,17 +139,7 @@ AUTH_USER_MODEL = 'account.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = "/"
 
-SECURE_SSL_REDIRECT = True  
-SESSION_COOKIE_SECURE = True  
-CSRF_COOKIE_SECURE = True  
-CSRF_COOKIE_HTTPONLY = True
-SECURE_HSTS_SECONDS = 31536000  
-SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-SECURE_HSTS_PRELOAD = True
-SECURE_CONTENT_TYPE_NOSNIFF = True  
-X_FRAME_OPTIONS = 'DENY'  
 
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # حداکثر حجم آپلود (5 مگابایت)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # حداکثر داده‌های آپلود (10 مگابایت)
-
 

@@ -54,3 +54,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.fullname
+
+class ScoreEntry(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='score_entries')
+    score = models.IntegerField()
+    reason = models.TextField()
+    date = models.DateTimeField(auto_now_add=True)
+
+    def str(self):
+        return f"{self.user.username} | {self.score} | {self.reason} | {self.date.strftime('%Y-%m-%d')}"
