@@ -38,10 +38,10 @@ urlpatterns = [  # Todo: create another path for the admin side
     path('see_borrowed_books/', see_borrowed_books, name='see_borrowed_books'),
     path('see_requests/', see_requests, name='see_requests'),
     path('create_request/<int:loan_id>', create_request, name='create_request'),
-
     path('successful/', successful, name='successful'),
     path('return_score_entry/<int:joined_number>',
          return_score_entry, name='return_score_entry'),
+
 
 
 ]

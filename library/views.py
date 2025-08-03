@@ -228,6 +228,18 @@ def undo_loan(request: HttpRequest, loan_id: int):
 
 
 @superuser_required
+def decrease_score(request: HttpRequest, loan_id: int):
+    loan = get_object_or_404(Loan, id=loan_id)
+    user = loan.user
+    score = ScoreEntry.objects.create(
+        user=user, score=-1, reason='به دلیل تحویل دیر وقت')
+    loan.is_return = True
+    score.save()
+    loan.save()
+    return redirect('successful')
+
+
+@superuser_required
 def search_books(request: HttpRequest):
     form = BookSearchForm(request.GET or None)
     context = {'form': form}
