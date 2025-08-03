@@ -1,17 +1,16 @@
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test, login_required
+from django.shortcuts import get_object_or_404, render, redirect
+from django.db.models import Case, When, IntegerField, Sum
 from .models import Book, Loan, Category, Post, Request
-from django.db.models import Case, When, IntegerField
+from account.models import CustomUser, ScoreEntry
 from django.contrib.auth.views import LoginView
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect
 from .forms import BookSearchForm, PostForm
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
-from account.models import CustomUser
-from datetime import timedelta
-from datetime import datetime
+from datetime import timedelta, datetime
+from django.http import JsonResponse
 from .forms import LoanForm
+from jdatetime import date
 import pandas as pd
 import pdfplumber
 import threading
@@ -99,7 +98,6 @@ def import_pdf_file(request: HttpRequest):
 
         try:
             row_number = request.POST["row_number"]
-            print('s')
             book_name = request.POST["book_name"]
             book_code = request.POST["book_code"]
             book = Book.objects.create(
@@ -107,7 +105,7 @@ def import_pdf_file(request: HttpRequest):
             book.save()
             context['succses'] = True
         except:
-            print('h')
+            pass
 
     return render(request, 'library/admin/inputfile.html', context)
 
@@ -115,6 +113,7 @@ def import_pdf_file(request: HttpRequest):
 @superuser_required
 def admin_dashboard(request: HttpRequest):
     today_date = datetime.now()
+    print(today_date)
     unforce_return = Loan.objects.filter(
         is_return=False)
     force_return = Loan.objects.filter(
@@ -216,8 +215,14 @@ def create_loan(request: HttpRequest):
 
 @superuser_required
 def undo_loan(request: HttpRequest, loan_id: int):
+    print(request, '-'*20)
     loan = get_object_or_404(Loan, id=loan_id)
     loan.is_return = True
+    today_date = date.today()
+    if loan.return_date < today_date:
+        score = ScoreEntry.objects.create(
+            user=loan.user, score=-1, reason='تحویل دیر کتاب ')
+        score.save()
     loan.save()
     return redirect('successful')
 
@@ -392,3 +397,14 @@ def create_request(http_request: HttpRequest, loan_id: int = None):
     request = Request.objects.create(loan=loan)
     request.save()
     return redirect('successful')
+
+
+def return_score_entry(request: HttpRequest, joined_number: int = None):
+    user: CustomUser = get_object_or_404(
+        CustomUser, joined_number=joined_number)
+    score_entries = user.score_entries.all().values(
+        'id', 'score', 'reason', 'date', 'user_id')
+    total_score = user.score_entries.aggregate(Sum('score'))['score__sum'] or 0
+
+    data = list(score_entries).append(total_score)
+    return JsonResponse(data, safe=False)
