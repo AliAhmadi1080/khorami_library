@@ -215,7 +215,6 @@ def create_loan(request: HttpRequest):
 
 @superuser_required
 def undo_loan(request: HttpRequest, loan_id: int):
-    print(request, '-'*20)
     loan = get_object_or_404(Loan, id=loan_id)
     loan.is_return = True
     today_date = date.today()
@@ -223,6 +222,18 @@ def undo_loan(request: HttpRequest, loan_id: int):
         score = ScoreEntry.objects.create(
             user=loan.user, score=-1, reason='تحویل دیر کتاب ')
         score.save()
+    loan.save()
+    return redirect('successful')
+
+
+@superuser_required
+def decrease_score(request: HttpRequest, loan_id: int):
+    loan = get_object_or_404(Loan, id=loan_id)
+    user = loan.user
+    score = ScoreEntry.objects.create(
+        user=user, score=-1, reason='به دلیل تحویل دیر وقت')
+    loan.is_return = True
+    score.save()
     loan.save()
     return redirect('successful')
 
