@@ -4,9 +4,9 @@ from django_jalali.db import models as jmodels
 
 
 class Book(models.Model):
-    name = models.CharField('اسم', max_length=255)
-    code = models.CharField('کد', max_length=255)
-    row_number = models.PositiveBigIntegerField('ردیف')
+    name = models.CharField('اسم', max_length=255, null=True)
+    code = models.CharField('کد', max_length=255, null=True)
+    row_number = models.PositiveBigIntegerField('ردیف', null=True)
 
     def __str__(self) -> str:
         return f'{self.name}--{self.code}'
@@ -66,3 +66,8 @@ class Request(models.Model):
     def __str__(self):
         return f"{self.user} کتاب {self.book} را در \
             تاریخ {self.request_date} درخواست داده است."
+
+
+class BookEmbedding(models.Model):
+    book = models.OneToOneField(Book, on_delete=models.CASCADE)
+    vector = models.JSONField() 
