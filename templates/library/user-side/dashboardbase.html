@@ -3,11 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>پنل مدیریت کاربر |
-    {% block title %}
-        
-    {% endblock title %}
-        </title>
+    <title>پنل مدیریت کاربر | {% block title %} {% endblock title %}</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css"
       rel="stylesheet"
@@ -141,8 +137,8 @@
               <span class="mx-3">وضعیت درخواست ها</span>
             </a>
             <a
-              class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
-              href="{% url 'homepage' %}"
+              class="{% block book_suggestion.html-style %}flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100{% endblock book_suggestion.html-style %}"
+              href="{% url 'book_suggestion' %}"
             >
               <svg
                 version="1.1"
@@ -153,7 +149,7 @@
                 viewBox="0,0,256,256"
               >
                 <g
-                  fill="#878787"
+                  fill="#808080"
                   fill-rule="nonzero"
                   stroke="none"
                   stroke-width="1"
@@ -170,13 +166,12 @@
                 >
                   <g transform="scale(5.12,5.12)">
                     <path
-                      d="M24.96289,1.05469c-0.20987,0.00724 -0.41214,0.08036 -0.57812,0.20898l-23,17.94727c-0.43579,0.33978 -0.51361,0.96851 -0.17383,1.4043c0.33978,0.43579 0.96851,0.51361 1.4043,0.17383l1.38477,-1.08008v26.29102c0.00006,0.55226 0.44774,0.99994 1,1h13.83203c0.10799,0.01785 0.21818,0.01785 0.32617,0h11.67383c0.10799,0.01785 0.21818,0.01785 0.32617,0h13.8418c0.55226,-0.00006 0.99994,-0.44774 1,-1v-26.29102l1.38477,1.08008c0.2819,0.21983 0.65967,0.27257 0.991,0.13833c0.33133,-0.13423 0.56586,-0.43504 0.61526,-0.7891c0.0494,-0.35406 -0.09386,-0.70757 -0.37579,-0.92736l-7.61523,-5.94141v-7.26953h-6v2.58594l-9.38477,-7.32227c-0.18607,-0.14428 -0.41707,-0.21828 -0.65234,-0.20898zM25,3.32227l19,14.82617v26.85156h-12v-19h-14v19h-12v-26.85156zM37,8h2v3.70898l-2,-1.5625zM20,28h10v17h-10z"
+                      d="M12,2c-3.30078,0 -6,2.69922 -6,6v34.41797c0,3.17578 2.83203,5.58203 6,5.58203h32v-2h-32c-2.16016,0 -4,-1.62109 -4,-3.58203c0,-1.96094 1.80078,-3.41797 4,-3.41797h32v-37zM12,4h30v33h-30c-1.49219,0 -2.90625,0.53906 -4,1.41797v-30.41797c0,-2.21875 1.78125,-4 4,-4zM15,9c-1.09375,0 -2,0.90625 -2,2v4c0,1.09375 0.90625,2 2,2h21c1.09375,0 2,-0.90625 2,-2v-4c0,-1.09375 -0.90625,-2 -2,-2zM15,11h21v4h-21z"
                     ></path>
                   </g>
                 </g>
               </svg>
-
-              <span class="mx-3">بازگشت به خانه</span>
+              <span class="mx-3">پیشنهاد کتاب</span>
             </a>
           </nav>
         </div>

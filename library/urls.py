@@ -6,7 +6,7 @@ from .views import (import_pdf_file, dashboard, undo_loan,
                     create_category, see_posts, edit_post,
                     see_post, see_all_posts, admin_dashboard, see_borrowed_books,
                     see_requests, successful, create_request, admin_see_requests,
-                    accepte_request, reject_request, return_score_entry
+                    accepte_request, reject_request, return_score_entry, book_suggestion
                     )
 
 urlpatterns = [  # Todo: create another path for the admin side
@@ -38,6 +38,9 @@ urlpatterns = [  # Todo: create another path for the admin side
     path('see_borrowed_books/', see_borrowed_books, name='see_borrowed_books'),
     path('see_requests/', see_requests, name='see_requests'),
     path('create_request/<int:loan_id>', create_request, name='create_request'),
+    path('book_suggestion/', book_suggestion, name='book_suggestion'),
+
+
     path('successful/', successful, name='successful'),
     path('return_score_entry/<int:joined_number>',
          return_score_entry, name='return_score_entry'),

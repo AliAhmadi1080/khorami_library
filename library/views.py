@@ -1,7 +1,8 @@
 from django.contrib.auth.decorators import user_passes_test, login_required
+from .models import Book, Loan, Category, Post, Request, BookEmbedding
+from django.db.models import Case, When, IntegerField, Sum, Count
 from django.shortcuts import get_object_or_404, render, redirect
-from django.db.models import Case, When, IntegerField, Sum
-from .models import Book, Loan, Category, Post, Request
+from sklearn.metrics.pairwise import cosine_similarity
 from account.models import CustomUser, ScoreEntry
 from django.core.management import call_command
 from django.contrib.auth.views import LoginView
@@ -13,6 +14,7 @@ from django.http import JsonResponse
 from .forms import LoanForm
 from jdatetime import date
 import pandas as pd
+import numpy as np
 import pdfplumber
 import threading
 
@@ -110,7 +112,7 @@ def import_pdf_file(request: HttpRequest):
             call_command('generate_embedding')
         except:
             pass
-        
+
     return render(request, 'library/admin/inputfile.html', context)
 
 
@@ -423,3 +425,55 @@ def return_score_entry(request: HttpRequest, joined_number: int = None):
 
     data = list(score_entries).append(total_score)
     return JsonResponse(data, safe=False)
+
+
+def get_user_embedding(user):
+    book_ids = Loan.objects.filter(
+        user=user, is_return=True).values_list("book_id", flat=True)
+    if len(book_ids) < 1:
+        return False
+    embeddings = BookEmbedding.objects.filter(
+        book_id__in=book_ids).values_list("vector", flat=True)
+
+    if not embeddings:
+        return False
+
+    embeddings = [np.array(vec) for vec in embeddings]
+    avg_embedding = np.mean(embeddings, axis=0)
+    return avg_embedding
+
+
+def get_similar_books(user_embedding, user, top_n=5):
+    read_book_ids = Loan.objects.filter(
+        user=user,
+        is_return=True  # فقط کتاب‌هایی که واقعاً خونده و پس داده
+    ).values_list("book_id", flat=True)
+
+    all_books = BookEmbedding.objects.exclude(book_id__in=read_book_ids)
+
+    similarities = []
+
+    for be in all_books:
+        book_vector = np.array(be.vector)
+        sim = cosine_similarity([user_embedding], [book_vector])[0][0]
+        similarities.append((be.book, sim))
+
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    return [book for book, score in similarities[:top_n]]
+
+
+@login_required
+def book_suggestion(request: HttpRequest):
+    user = request.user
+    avg_embedding = get_user_embedding(user)
+    if not isinstance(avg_embedding, bool):
+        books = get_similar_books(avg_embedding, user=user)
+
+    else:
+        books = Book.objects.annotate(
+            loan_count=Count('loan')
+        ).order_by(
+            '-loan_count')[:5]
+    context = {'books': books}
+
+    return render(request, 'library/user-side/book_suggestion.html', context)

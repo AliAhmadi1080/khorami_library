@@ -1,0 +1,56 @@
+{% extends 'library/user-side/dashboardbase.html' %}
+{% block title %}
+    پیشنهاد کتاب
+{% endblock title %}
+{% block book_suggestion.html-style %}
+flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25
+{% endblock book_suggestion.html-style %}
+     {% block headname %}
+پیشنهاد کتاب {% endblock headname %} {% block header %}
+
+<h2 class="text-xl"> 
+    اینجا، کتاب‌های پیشنهادی بر اساس مطالعات گذشتهٔ شما و از میان فهرست کتاب‌های تعریف‌شدهٔ مدرسه انتخاب شده‌اند.
+</h2>{% endblock header %} {% block maincontent %}
+
+<div class="mt-8">
+    <h2 class="text-2xl font-semibold text-gray-800 mb-4">بهریتن پیشنهاد های ما برای شما:</h2> 
+  
+  <table class="min-w-full bg-white text-right border border-gray-200 rounded-lg shadow">
+    <thead>
+      <tr>
+        <th class="py-2 px-4 border-b">#</th>
+        <th class="py-2 px-4 border-b">نام کتاب</th>
+        <th class="py-2 px-4 border-b">کد کتاب</th>
+        <!-- <th class="py-2 px-4 border-b">تعداد خواننده های کتاب</th> -->
+        <!-- <th class="py-2 px-4 border-b">خلاصه داستان کتاب</th> -->
+      </tr>
+    </thead>
+    <tbody class="bg-white">
+        
+        {% for book in books %}
+            <tr>
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{forloop.counter}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{book.name}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{book.code}}
+          </td>
+
+          <!-- <td class="px-6 py-4 text-sm leading-5 text-gray-500 whitespace-no-wrap border-b border-gray-200">
+            {{book.loan_count}}              
+          </td> -->
+        </tr>
+        {% endfor %}
+            
+        
+        
+      </tbody>
+  </table>
+</div>
+
+{% endblock maincontent %}
