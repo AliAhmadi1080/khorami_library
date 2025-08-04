@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404, render, redirect
 from django.db.models import Case, When, IntegerField, Sum
 from .models import Book, Loan, Category, Post, Request
 from account.models import CustomUser, ScoreEntry
+from django.core.management import call_command
 from django.contrib.auth.views import LoginView
 from .forms import BookSearchForm, PostForm
 from django.http.request import HttpRequest
@@ -67,6 +68,7 @@ def handle_uploaded_file(f):
             book.save()
         except:
             pass
+    call_command('generate_embedding')
 
 
 def superuser_required(function=None, redirect_field_name='next', login_url='/account/login/'):
@@ -93,6 +95,7 @@ def import_pdf_file(request: HttpRequest):
             t1 = threading.Thread(target=handle_uploaded_file, args=(file,))
             t1.start()
             context['succses'] = True
+            call_command('generate_embedding')
         except:
             pass
 
@@ -104,9 +107,10 @@ def import_pdf_file(request: HttpRequest):
                 name=book_name, row_number=row_number, code=book_code)
             book.save()
             context['succses'] = True
+            call_command('generate_embedding')
         except:
             pass
-
+        
     return render(request, 'library/admin/inputfile.html', context)
 
 
