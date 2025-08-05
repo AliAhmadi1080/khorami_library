@@ -160,34 +160,6 @@ def create_user(request: HttpRequest):
     return render(request, 'library/admin/create_user.html', context)
 
 
-def home_page(request: HttpRequest):
-    five_last_posts = Post.objects.all().order_by('-id')[:4]
-    five_last_books = Book.objects.all().order_by('-id')[:5]
-    context = {'posts': five_last_posts, 'books': five_last_books}
-    return render(request, 'library/user-side/homepage.html', context)
-
-
-def see_post(request: HttpRequest, post_id: int):
-    post = get_object_or_404(Post, id=post_id)
-    context = {'post': post}
-    return render(request, 'library/user-side/see_post.html', context)
-
-
-def see_all_posts(request: HttpRequest):
-    posts = Post.objects.all()
-    context = {'posts': posts}
-    return render(request, 'library/user-side/see_all_posts.html', context)
-
-
-def search_book(request: HttpRequest):
-    input = request.GET.get('input', None).strip()
-    books = Book.objects.filter(name__contains=input if input else '')
-    if input is None or input == '':
-        books = books[:20]
-    context = {'books': books, 'count': Book.objects.all().count()
-               if not input else books.count(), 'input': input}
-
-    return render(request, 'library/user-side/search_book.html', context)
 
 
 @superuser_required
