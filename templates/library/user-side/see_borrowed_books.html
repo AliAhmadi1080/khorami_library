@@ -16,55 +16,65 @@ flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25
 
 
 {% block header %}
-    <h2 class="text-xl">تعداد کل کتاب‌های امانت‌گرفته‌شده: {{borrowed_books}} عدد و تعداد کتاب‌های عقب‌افتاده: {{unreturned_books_list.count}} عدد می‌باشد.</h2>
+    <h2 class="text-xl font-semibold mb-4">
+    <span class="text-green-500">تعداد کتاب های امانت‌گرفته‌شده:</span> {{ borrowed_books.count }} |
+    <span class="text-red-500">تعداد کتاب‌های عقب‌افتاده:</span> {{ unreturned_books_count }} 
+    </h2>
+
 {% endblock header %}
     
 
 
 {% block maincontent %}
-<table class="min-w-full">
-    <thead>
-      <tr>
-        <th
-          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-        >
-          اسم کتاب
-        </th>
-        <th
-          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-        >
-          کد کتاب
-        </th>
-        <th
-          class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-        >
-          تاریخ بازگشت
-        </th>
-        
-      </tr>
-    </thead>
-
-    <tbody class="bg-white">
-      
-      {% for unreturned_book in unreturned_books_list %}
-          <tr>
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              {{unreturned_book.book.name}}
-            </td>
-  
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              {{unreturned_book.book.code}}
-            </td>
-  
-            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-              {{unreturned_book.return_date}}
-            </td>
-  
+    <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+    <h3 class="text-xl"></h3>
+    <br />
+    <div
+        class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
+    >
+        <table class="min-w-full">
+        <thead>
+            <tr>
+            <th
+                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+            >
+                اسم کتاب
+            </th>
+            <th
+                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+            >
+                کد کتاب
+            </th>
+            <th
+                class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+            >
+                تاریخ بازگشت
+            </th>
             
-          </tr>
-      {% endfor %}
-          
-    </tbody>
-  </table>
+            </tr>
+        </thead>
+
+        <tbody class="bg-white">
+            {% for loan in borrowed_books %}
+            <tr>
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                {{loan.book.name}}
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                {{loan.book.code}}
+            </td>
+
+            <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+                {{loan.return_date}}
+            </td>
+
+            
+            </tr>
+            {% endfor %}
+        </tbody>
+        </table>
+    </div>
+    </div>
 {% endblock maincontent %}
     

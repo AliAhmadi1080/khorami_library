@@ -12,7 +12,7 @@
         <input
           type="text"
           id="book_name"
-          name="book_name"
+          name="name"
           placeholder="نام کتاب را وارد کنید"
           class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -25,7 +25,7 @@
         <input
           type="text"
           id="book_code"
-          name="book_code"
+          name="code"
           placeholder="کد کتاب را وارد کنید"
           class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -57,29 +57,66 @@
 <div class="mt-8">
   {% if results %}
   <h2 class="text-2xl font-semibold text-gray-800 mb-4">نتایج جستجو:</h2>
-  <table
-    class="min-w-full bg-white text-right border border-gray-200 rounded-lg shadow"
+  <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <br />
+  <div
+    class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
   >
-    <thead>
-      <tr>
-        <th class="py-2 px-4 border-b">#</th>
-        <th class="py-2 px-4 border-b">نام شخص عضو</th>
-        <th class="py-2 px-4 border-b">اسم کتاب</th>
-        <th class="py-2 px-4 border-b">کد</th>
-        <th class="py-2 px-4 border-b"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for Loan in results %}
-      <tr>
-        <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
-        <td class="py-2 px-4 border-b">{{ Loan.user.fullname }}</td>
-        <td class="py-2 px-4 border-b">{{ Loan.book.name }}</td>
-        <td class="py-2 px-4 border-b">{{ Loan.book.code }}</td>
+    <table class="min-w-full">
+      <thead>
+        <tr>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            #
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            نام شخص
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            اسم کتاب
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            کد کتاب
+          </th>
 
-        {% if is_return %} {% endif %}
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          ></th>
+        </tr>
+      </thead>
 
-        <td class="py-2 px-4 border-b">
+      <tbody class="bg-white">
+        {% for Loan in results %}
+        <tr>
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{forloop.counter}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{Loan.user}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{Loan.book.name}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{Loan.book.code}}
+          </td>
+
+          <td
+            class="px-6 py-4 whitespace-no-wrap border-b text-green-500 border-gray-200"
+          >
+            {{request.request_date}}
+          </td>
+<td class="py-2 px-4 border-b">
           {% if not Loan.is_return %}<!--create a template for it-->
           <a
             href="{% url 'undo_return' Loan.id %}"
@@ -95,11 +132,14 @@
             بازگشتی
           </button>
           {% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+          
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
   {% else %}
   <p class="text-gray-600">کتابی یافت نشد.</p>
   {% endif %}

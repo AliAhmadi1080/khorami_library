@@ -20,46 +20,84 @@
 
 {% endblock header %}
   {% block maincontent %}
-<div class="mt-8">
-  <h2 class="text-2xl font-semibold text-gray-800 mb-4">نتایج درخواست ها:</h2>
-  <table
-    class="min-w-full bg-white text-right border border-gray-200 rounded-lg shadow"
+<div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+  <h3 class="text-xl">نتایج درخواست ها</h3>
+  <br />
+  <div
+    class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
   >
-    <thead>
-      <tr>
-        <th class="py-2 px-4 border-b">#</th>
-        <th class="py-2 px-4 border-b">نام کتاب</th>
-        <th class="py-2 px-4 border-b">کد کتاب</th>
-        <th class="py-2 px-4 border-b">تاریخ تحویل</th>
-        <th class="py-2 px-4 border-b">وضعیت</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for request in requests %}
-      <tr>
-        <td class="py-2 px-4 border-b">{{forloop.counter}}</td>
-        <td class="py-2 px-4 border-b">{{request.loan.book.name}}</td>
-        <td class="py-2 px-4 border-b">{{request.loan.book.code}}</td>
-        <td class="py-2 px-4 border-b">{{request.loan.return_date}}</td>
-        {% if request.status == "processing" %}
-        <td class="py-2 px-4 border-b text-blue-500">
+    <table class="min-w-full">
+      <thead>
+        <tr>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            #
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            نام کتاب
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            کد کتاب
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            تاریخ تحویل
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            وضعیت
+          </th>
+          
+        </tr>
+      </thead>
+
+      <tbody class="bg-white">
+        {% for request in requests %}
+        <tr>
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{forloop.counter}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{request.loan.book.name}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{request.loan.book.code}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{request.loan.return_date}}
+          </td>
+
+          {% if request.status == "processing" %}
+        <td class="px-6 py-4 whitespace-no-wrap border-b text-blue-500 border-gray-200">
             درحال پردازش
           </td>
         {% elif request.status == "rejected" %}
-        <td class="py-2 px-4 border-b text-red-500">
+        <td class="px-6 py-4 whitespace-no-wrap border-b text-red-500 border-gray-200">
             رد درخواست
           </td>
         {% elif request.status == "accepted" %}
-        <td class="py-2 px-4 border-b text-green-500">
+        <td class="px-6 py-4 whitespace-no-wrap border-b text-green-500 border-gray-200">
             پذیرش درخواست
           </td>
 
         {% endif %}
+          
 
-        
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+          
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

@@ -119,7 +119,6 @@ def import_pdf_file(request: HttpRequest):
 @superuser_required
 def admin_dashboard(request: HttpRequest):
     today_date = datetime.now()
-    print(today_date)
     unforce_return = Loan.objects.filter(
         is_return=False)
     force_return = Loan.objects.filter(
@@ -158,8 +157,6 @@ def create_user(request: HttpRequest):
             context['error'] = 'این شماره عضویت وجود دارد'
 
     return render(request, 'library/admin/create_user.html', context)
-
-
 
 
 @superuser_required
@@ -224,7 +221,7 @@ def search_books(request: HttpRequest):
     if form.is_valid():
         name = form.cleaned_data.get('name')
         code = form.cleaned_data.get('code')
-        user = form.cleaned_data.get('user')
+        user = request.user
         is_return = form.cleaned_data.get('is_return')
         results = Loan.objects.select_related('book', 'user')
         if name:
@@ -340,11 +337,11 @@ def dashboard(request: HttpRequest):
 @login_required
 def see_borrowed_books(request: HttpRequest):
     borrowed_books = Loan.objects.filter(
-        user=request.user).count()
-    unreturned_books_list = Loan.objects.filter(
-        user=request.user, is_return=False)
+        user=request.user)
+    unreturned_books_count = Loan.objects.filter(
+        user=request.user, is_return=False).count()
     context = {"borrowed_books": borrowed_books,
-               "unreturned_books_list": unreturned_books_list}
+               "unreturned_books_count": unreturned_books_count}
     return render(request, 'library/user-side/see_borrowed_books.html', context)
 
 

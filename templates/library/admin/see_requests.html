@@ -14,55 +14,95 @@
     
 
 {% block maincontent %}
-<table
-class="min-w-full bg-white text-right border border-gray-200 rounded-lg shadow"
->
-<thead>
-  <tr>
-    <th class="py-2 px-4 border-b">#</th>
-    <th class="py-2 px-4 border-b">نام شخص عضو</th>
-    <th class="py-2 px-4 border-b">اسم کتاب</th>
-    <th class="py-2 px-4 border-b">کد</th>
-    <th class="py-2 px-4 border-b">تاریخ درخواست</th>
-    <th class="py-2 px-4 border-b"></th>
-  </tr>
-</thead>
-<tbody>
- 
-  
-  {% for request in requests %}
-    <tr>
-      <td class="py-2 px-4 border-b">{{ forloop.counter }}</td>
-      <td class="py-2 px-4 border-b">{{ request.loan.user.fullname }}</td>
-      <td class="py-2 px-0 border-b">{{ request.loan.book.name }}</td>
-      <td class="py-2 px-4 border-b">{{ request.loan.book.code }}</td>
-  
-      
-  
-      <td class="py-2 px-4 border-b">{{ request.request_date }}</td>    
-      <td class="py-2 px-4 border-b flex flex-col">
-        
-        <a
-          href="{% url 'accepte_request' request.id %}"
-          class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded"
-        >
-          قبول کردن
-        </a>
-        <a
-          href="{% url 'reject_request' request.id %}"
-          class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-4 rounded"
-        >
-          رد کردن
-        </a>
-        
-    
-    
-      </td>
-    </tr>
-  {% endfor %}
-    
-  
-</tbody>
-</table>
+<div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+  <h3 class="text-xl">نتایج درخواست ها</h3>
+  <br />
+  <div
+    class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
+  >
+    <table class="min-w-full">
+      <thead>
+        <tr>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            #
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            نام شخص
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            اسم کتاب
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            کد کتاب
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            تاریخ درخواست
+          </th>
+
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          ></th>
+        </tr>
+      </thead>
+
+      <tbody class="bg-white">
+        {% for request in requests %}
+        <tr>
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{forloop.counter}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{request.loan.user}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{request.loan.book.name}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{request.loan.book.code}}
+          </td>
+
+          <td
+            class="px-6 py-4 whitespace-no-wrap border-b text-green-500 border-gray-200"
+          >
+            {{request.request_date}}
+          </td>
+
+          <td
+            class="px-6 py-4 whitespace-no-wrap border-b text-green-500 border-gray-200"
+          >
+            <div class="content-center flex flex-col">
+              <a
+                href="{% url 'accepte_request' request.id %}"
+                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded text-center"
+              >
+                قبول کردن
+              </a>
+              <a
+                href="{% url 'reject_request' request.id %}"
+                class="bg-red-500 hover:bg-red-700 text-white font-bold py-1 rounded text-center"
+              >
+                رد کردن
+              </a>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
 {% endblock maincontent %}
-    
