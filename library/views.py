@@ -1,16 +1,16 @@
 from django.contrib.auth.decorators import user_passes_test, login_required
-from .models import Book, Loan, Category, Post, Request, BookEmbedding
 from django.db.models import Case, When, IntegerField, Sum, Count
 from django.shortcuts import get_object_or_404, render, redirect
+from .models import Book, Loan, Request, BookEmbedding
 from sklearn.metrics.pairwise import cosine_similarity
 from account.models import CustomUser, ScoreEntry
 from django.core.management import call_command
 from django.contrib.auth.views import LoginView
-from .forms import BookSearchForm, PostForm
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
 from datetime import timedelta, datetime
 from django.http import JsonResponse
+from .forms import BookSearchForm
 from .forms import LoanForm
 from jdatetime import date
 import pandas as pd
@@ -270,57 +270,7 @@ class UserLoginView(LoginView):
     redirect_authenticated_user = 'homepage'
 
 
-@superuser_required
-def create_post(request: HttpRequest):
-    form = PostForm()
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            form.save()
-    context = {'form': form}
-    return render(request, 'library/admin/create_post.html', context)
 
-
-@superuser_required
-def edit_post(request: HttpRequest, post_id):
-
-    post = get_object_or_404(Post, id=post_id)
-    form = PostForm(instance=post)
-
-    if request.method == "POST":
-        form = PostForm(request.POST)
-        if form.is_valid():
-            data = form.data
-            post.title = data['title']
-            post.body = data['body']
-            post.categories.clear()
-            for i in request.POST.getlist('categories'):
-                category = Category.objects.get(id=i)
-                post.categories.add(category)
-            post.save()
-
-    title_value = post.title
-    body_value = post.body
-    context = {'form': form,
-               'title_value': title_value, 'body_value': body_value}
-    return render(request, 'library/admin/edit_post.html', context)
-
-
-@superuser_required
-def see_posts(request):
-    posts = Post.objects.all()
-    context = {'posts': posts}
-    return render(request, 'library/admin/see_posts.html', context)
-
-
-@superuser_required
-def create_category(request: HttpRequest):
-    if request.method == "POST":
-        name = request.POST['name']
-        category = Category.objects.create(name=name)
-        category.save()
-    context = {}
-    return render(request, 'library/admin/create_category.html', context)
 
 
 @login_required

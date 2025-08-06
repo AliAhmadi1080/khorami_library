@@ -28,20 +28,6 @@ class Loan(models.Model):
             تاریخ {self.loan_date} قرض گرفته است."
 
 
-class Category(models.Model):
-    name = models.CharField(max_length=30, unique=True)
-
-    def __str__(self):
-        return self.name
-
-
-class Post(models.Model):
-    title = models.CharField(max_length=255)
-    body = models.TextField()
-    created_on = jmodels.jDateField(auto_now_add=True)
-    last_modified = jmodels.jDateField(auto_now=True)
-    categories = models.ManyToManyField(Category, related_name="posts")
-
 
 class Request(models.Model):
     PROCESSING = 'processing'
