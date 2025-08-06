@@ -1,0 +1,110 @@
+{% extends 'adminbase.html' %}
+{% load library_filters %} 
+ {% block title %} نمایش امتیاز اعضا {% endblock title %}
+{% block heading %} نمایش امتیاز اعضا {% endblock heading %} 
+{% block see_score.html-style %}
+ active-nav-link opacity-100 
+ {% endblock see_score.html-style %} 
+ {% block maincontent %}
+
+<div class="bg-white shadow rounded-lg p-6">
+  <form method="POST" action="{% url 'see_score' %}">
+    {% csrf_token %}
+    <div class="flex flex-col md:flex-row justify-around items-center gap-4">
+      <div>
+        <label for="full_name" class="block text-gray-700 font-medium mb-2">نام شخص</label>
+        <input type="text" id="full_name" name="full_name" placeholder="نام کتاب را وارد کنید" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div>
+        <label for="joined_number" class="block text-gray-700 font-medium mb-2">شماره عضویت</label>
+        <input type="number" id="joined_number" name="joined_number" placeholder="کد کتاب را وارد کنید" class="w-full px-4 py-2 border rounded-lg text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+      </div>
+
+      <div class="flex items-end">
+        <button type="submit" class="w-full bg-blue-500 text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+          جستجو
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="mt-8">
+  {% if users %}
+  <h2 class="text-2xl font-semibold text-gray-800 mb-4">نتایج جستجو:</h2>
+  <div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+      <br />
+  <div
+    class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
+  >
+    <table class="min-w-full">
+      <thead>
+        <tr>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            #
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            نام شخص
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            کلاس شخص
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            شماره عضویت
+          </th>
+
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >امتیاز شخص</th>
+        </tr>
+      </thead>
+
+      <tbody class="bg-white">
+        {% for user in users %}
+        
+        <tr>
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{forloop.counter}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{user.fullname}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{user.classname}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{user.joined_number}}
+          </td>
+          
+          {% if user|calculate_total_score >= 0 %}
+                <td class="px-6 py-4 text-green-400">{{ user|calculate_total_score }}</td>
+            {% else %}
+                <td class="px-6 py-4 text-red-400">{{ user|calculate_total_score }}</td>
+            {% endif %}
+        
+          
+          
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+  {% else %}
+  <p class="text-gray-600">شخصی یافت نشد.</p>
+  {% endif %}
+</div>
+{% endblock maincontent %}

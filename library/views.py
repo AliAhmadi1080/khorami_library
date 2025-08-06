@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import user_passes_test, login_required
-from django.db.models import Case, When, IntegerField, Sum, Count
+from django.db.models import Case, When, IntegerField, Sum, Count, Q
 from django.shortcuts import get_object_or_404, render, redirect
 from .models import Book, Loan, Request, BookEmbedding
 from sklearn.metrics.pairwise import cosine_similarity
@@ -246,6 +246,24 @@ def admin_see_requests(request: HttpRequest):
 
 
 @superuser_required
+def see_score(request: HttpRequest):
+    context = {}
+    if request.method == 'POST':
+        fullname = request.POST['full_name'].strip()
+        try:
+            joined_number = int(request.POST['joined_number'].strip())
+        except:
+            joined_number = None
+
+
+        if fullname or joined_number:
+            users = CustomUser.objects.filter(Q(fullname=fullname) | Q(joined_number=joined_number))
+            context['users'] = users
+            
+    return render(request, 'library/admin/see_scores.html', context)
+
+
+@superuser_required
 def accepte_request(request: HttpRequest, request_id: int):
     request: Request = get_object_or_404(Request, id=request_id)
     loan = request.loan
@@ -267,9 +285,7 @@ def reject_request(request: HttpRequest, request_id: int):
 
 class UserLoginView(LoginView):
     template_name = 'library/user-side/login.html'
-    redirect_authenticated_user = 'homepage'
-
-
+    redirect_authenticated_user = 'dashboard'
 
 
 
@@ -396,3 +412,5 @@ def book_suggestion(request: HttpRequest):
     context = {'books': books}
 
     return render(request, 'library/user-side/book_suggestion.html', context)
+
+
