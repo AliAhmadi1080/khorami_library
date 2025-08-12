@@ -76,7 +76,6 @@
 
               <span class="mx-3">داشبورد</span>
             </a>
-
             <a
               class="{% block see_borrowed_books.html-style %}flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100{% endblock see_borrowed_books.html-style %}"
               href="{% url 'see_borrowed_books' %}"
@@ -173,6 +172,47 @@
               </svg>
               <span class="mx-3">پیشنهاد کتاب</span>
             </a>
+            <form action="{% url 'logout' %}" method="post">
+              <button
+                class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"
+                href="{% url 'logout' %}"
+              >
+                {% csrf_token %}
+
+                <svg
+                  version="1.1"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  height="28px"
+                  width="28px"
+                  viewBox="0,0,256,256"
+                >
+                  <g
+                    fill="#808080"
+                    fill-rule="nonzero"
+                    stroke="none"
+                    stroke-width="1"
+                    stroke-linecap="butt"
+                    stroke-linejoin="miter"
+                    stroke-miterlimit="10"
+                    stroke-dasharray=""
+                    stroke-dashoffset="0"
+                    font-family="none"
+                    font-weight="none"
+                    font-size="none"
+                    text-anchor="none"
+                    style="mix-blend-mode: normal"
+                  >
+                    <g transform="scale(5.12,5.12)">
+                      <path
+                        d="M3,0c-1.64453,0 -3,1.35547 -3,3v44c0,1.64453 1.35547,3 3,3h34c1.64453,0 3,-1.35547 3,-3v-8l-2,2v6c0,0.5625 -0.4375,1 -1,1h-34c-0.5625,0 -1,-0.4375 -1,-1v-44c0,-0.56641 0.43359,-1 1,-1h34c0.5625,0 1,0.4375 1,1v6l2,2v-8c0,-1.64453 -1.35547,-3 -3,-3zM37.84375,13.09375c-0.375,0.06641 -0.67578,0.33984 -0.78125,0.70313c-0.10547,0.36719 0.00391,0.75781 0.28125,1.01563l9.1875,9.1875h-29.53125c-0.03125,0 -0.0625,0 -0.09375,0c-0.55078,0.02734 -0.98047,0.49609 -0.95312,1.04688c0.02734,0.55078 0.49609,0.98047 1.04688,0.95313h29.53125l-9.1875,9.1875c-0.29687,0.24219 -0.43359,0.62891 -0.34766,1.00391c0.08594,0.37109 0.37891,0.66406 0.75,0.75c0.375,0.08594 0.76172,-0.05078 1.00391,-0.34766l10.90625,-10.875l0.6875,-0.71875l-0.6875,-0.71875l-10.90625,-10.875c-0.20703,-0.22266 -0.50781,-0.33594 -0.8125,-0.3125c-0.03125,0 -0.0625,0 -0.09375,0z"
+                      ></path>
+                    </g>
+                  </g>
+                </svg>
+                <span class="mx-3">خروج</span>
+              </button>
+            </form>
           </nav>
         </div>
         <div class="flex flex-col flex-1 overflow-hidden">
