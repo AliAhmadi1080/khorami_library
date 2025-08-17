@@ -111,11 +111,6 @@
             {{Loan.book.code}}
           </td>
 
-          <td
-            class="px-6 py-4 whitespace-no-wrap border-b text-green-500 border-gray-200"
-          >
-            {{request.request_date}}
-          </td>
 <td class="py-2 px-4 border-b">
           {% if not Loan.is_return %}<!--create a template for it-->
           <a
@@ -132,7 +127,7 @@
             بازگشتی
           </button>
           {% endif %}
-          
+</td>
         </tr>
         {% endfor %}
       </tbody>
