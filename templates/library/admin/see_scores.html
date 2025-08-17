@@ -49,17 +49,17 @@
           <th
             class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
           >
+            شماره عضویت
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
             نام شخص
           </th>
           <th
             class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
           >
             کلاس شخص
-          </th>
-          <th
-            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
-          >
-            شماره عضویت
           </th>
 
           <th
@@ -73,7 +73,14 @@
         
         <tr>
           <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            
             {{forloop.counter}}
+          </td>
+
+          <td class="px-6 py-4 text-blue-500 hover:text-blue-700 whitespace-no-wrap border-b border-gray-200">
+            <a href="{% url 'user_score' user.joined_number %}">
+            {{user.joined_number}}
+            </a>
           </td>
 
           <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
@@ -83,15 +90,11 @@
           <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
             {{user.classname}}
           </td>
-
-          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
-            {{user.joined_number}}
-          </td>
           
           {% if user|calculate_total_score >= 0 %}
-                <td class="px-6 py-4 text-green-400">{{ user|calculate_total_score }}</td>
+                <td class="px-6 py-4 text-green-400 whitespace-no-wrap border-b border-gray-200">{{ user|calculate_total_score }}</td>
             {% else %}
-                <td class="px-6 py-4 text-red-400">{{ user|calculate_total_score }}</td>
+                <td class="px-6 py-4 text-red-400 whitespace-no-wrap border-b border-gray-200">{{ user|calculate_total_score }}</td>
             {% endif %}
         
           

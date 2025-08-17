@@ -146,7 +146,7 @@ def create_user(request: HttpRequest):
                 username=fullname+last_id, fullname=fullname,
                 classname=classname, joined_number=joined_number)
             password = str(int(joined_number)*2+3) + \
-                str(int(joined_number)*2+CustomUser.objects.last())
+                str(int(joined_number)*2+CustomUser.objects.last().id)
 
             user.set_password(password)
             user.save()
@@ -260,6 +260,25 @@ def see_score(request: HttpRequest):
             context['users'] = users
 
     return render(request, 'library/admin/see_scores.html', context)
+
+
+@superuser_required
+def user_score(request: HttpRequest, joined_number: int):
+    user = get_object_or_404(CustomUser, joined_number=joined_number)
+    scores = ScoreEntry.objects.filter(user=user)[:15]
+    context = {'user': user, 'scores': scores}
+    if request.method == 'POST':
+        try:
+            score = request.POST['score']
+            reason = request.POST['reason']
+            scoreentry = ScoreEntry.objects.create(
+                user=user, score=score, reason=reason)
+            scoreentry.save()
+            context['succses'] = True
+        except:
+            context['succses'] = 'false'
+
+    return render(request, 'library/admin/user_score.html', context)
 
 
 @superuser_required
