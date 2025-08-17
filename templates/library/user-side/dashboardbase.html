@@ -172,6 +172,13 @@
               </svg>
               <span class="mx-3">پیشنهاد کتاب</span>
             </a>
+            <a
+              class="{% block check_score.html-style %}flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100{% endblock check_score.html-style %}"
+              href="{% url 'check_score' %}"
+            >
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="32px" height="32px" viewBox="0,0,256,256"><g fill="#808080" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><g transform="scale(8,8)"><path d="M16,5c-3.85433,0 -7,3.14567 -7,7c0,2.40742 1.22731,4.53818 3.08789,5.79883c-3.57504,1.52588 -6.08789,5.07498 -6.08789,9.20117h2c0,-4.411 3.589,-8 8,-8c1.592,0 3.07331,0.47334 4.32031,1.27734l0.80859,-1.8457c-0.39215,-0.23566 -0.80447,-0.44304 -1.22852,-0.625c1.86709,-1.25964 3.09961,-3.39421 3.09961,-5.80664c0,-3.85433 -3.14567,-7 -7,-7zM16,7c2.77367,0 5,2.22633 5,5c0,2.77367 -2.22633,5 -5,5c-2.77367,0 -5,-2.22633 -5,-5c0,-2.77367 2.22633,-5 5,-5zM23.7168,17.50586l-0.91602,2.09375l-1.27148,2.9043l-5.44922,0.57813l3.97656,3.54102l-1.05664,5.3457l4.7168,-2.72461l4.71484,2.72461l-1.05664,-5.3457l3.97656,-3.54102l-5.44922,-0.57812zM23.7168,22.49219l0.82031,1.87695l2.11133,0.22461l-1.45703,1.29688l0.42188,2.14063l-1.89648,-1.0957l-1.90039,1.09766l0.42383,-2.14258l-1.45703,-1.29687l2.11133,-0.22461z"></path></g></g></svg>
+              <span class="mx-3">بررسی امتیازات</span>
+            </a>
             <form action="{% url 'logout' %}" method="post">
               <button
                 class="flex items-center px-6 py-2 mt-4 text-gray-500 hover:bg-gray-700 hover:bg-opacity-25 hover:text-gray-100"

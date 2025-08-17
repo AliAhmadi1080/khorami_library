@@ -1,0 +1,81 @@
+{% extends 'library/user-side/dashboardbase.html' %}
+{% block title %}
+    بررسی امتیازات
+{% endblock title %}
+{% block book_suggestion.html-style %}
+flex items-center px-6 py-2 mt-4 text-gray-100 bg-gray-700 bg-opacity-25
+{% endblock book_suggestion.html-style %}
+     {% block headname %}
+بررسی امتیازات {% endblock headname %} {% block header %}
+
+<h2 class="text-xl"> 
+    اینجا امتیاز هایی که برای اعضا ثبت شده نمایش داده میشود
+</h2>{% endblock header %} {% block maincontent %}<div class="py-2 -my-2 overflow-x-auto sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+  <h3 class="text-xl">امتیازات شما:</h3>
+  <br />
+  <div
+    class="inline-block min-w-full overflow-hidden align-middle border-b border-gray-200 shadow sm:rounded-lg"
+  >
+    <table class="min-w-full">
+      <thead>
+        <tr>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            #
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            شماره ثبت
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            امتیاز
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            دلیل
+          </th>
+          <th
+            class="px-6 py-3 text-xs font-medium leading-4 tracking-wider text-right text-gray-500 uppercase border-b border-gray-200 bg-gray-50"
+          >
+            تاریخ
+          </th>
+        </tr>
+      </thead>
+
+      <tbody class="bg-white">
+        {% for score in scores %}
+        <tr>
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{forloop.counter}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{score.id}}
+          </td>
+
+          {% if score.score >= 0 %}
+          <td style="direction: ltr; text-align: right;" class="px-6 py-4 text-green-400 whitespace-no-wrap border-b border-gray-200">{{ score.score }}</td>
+          {% else %}
+<td style="direction: ltr; text-align: right;" class="px-6 py-4 text-red-400 whitespace-no-wrap border-b border-gray-200">{{ score.score }}</td>
+          {% endif %}
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{score.reason}}
+          </td>
+
+          <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200">
+            {{score.date}}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock maincontent %}

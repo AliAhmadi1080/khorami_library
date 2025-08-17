@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import user_passes_test, login_required
-from django.db.models import Case, When, IntegerField, Sum, Count, Q
 from django.shortcuts import get_object_or_404, render, redirect
+from django.db.models import Case, When, IntegerField, Count, Q
 from .models import Book, Loan, Request, BookEmbedding
 from sklearn.metrics.pairwise import cosine_similarity
 from account.models import CustomUser, ScoreEntry
@@ -9,7 +9,6 @@ from django.contrib.auth.views import LoginView
 from django.http.request import HttpRequest
 from account.forms import CustomUserForm
 from datetime import timedelta, datetime
-from django.http import JsonResponse
 from .forms import BookSearchForm
 from .forms import LoanForm
 from jdatetime import date
@@ -195,7 +194,7 @@ def undo_loan(request: HttpRequest, loan_id: int):
     today_date = date.today()
     if loan.return_date < today_date:
         score = ScoreEntry.objects.create(
-            user=loan.user, score=-1, reason='تحویل دیر کتاب ')
+            user=loan.user, score=-1, reason='تحویل دیر کتاب: '+loan.book.name[:40]+'...')
         score.save()
     loan.save()
     return redirect('successful')
@@ -255,11 +254,11 @@ def see_score(request: HttpRequest):
         except:
             joined_number = None
 
-
         if fullname or joined_number:
-            users = CustomUser.objects.filter(Q(fullname=fullname) | Q(joined_number=joined_number))
+            users = CustomUser.objects.filter(
+                Q(fullname=fullname) | Q(joined_number=joined_number))
             context['users'] = users
-            
+
     return render(request, 'library/admin/see_scores.html', context)
 
 
@@ -286,7 +285,6 @@ def reject_request(request: HttpRequest, request_id: int):
 class UserLoginView(LoginView):
     template_name = 'library/user-side/login.html'
     redirect_authenticated_user = 'dashboard'
-
 
 
 @login_required
@@ -351,15 +349,13 @@ def create_request(http_request: HttpRequest, loan_id: int = None):
     return redirect('successful')
 
 
-def return_score_entry(request: HttpRequest, joined_number: int = None):
-    user: CustomUser = get_object_or_404(
-        CustomUser, joined_number=joined_number)
-    score_entries = user.score_entries.all().values(
-        'id', 'score', 'reason', 'date', 'user_id')
-    total_score = user.score_entries.aggregate(Sum('score'))['score__sum'] or 0
+@login_required
+def check_score(request: HttpRequest):
+    user = request.user
+    scores = ScoreEntry.objects.filter(user=user)[:10]
+    context = {'scores': scores}
 
-    data = list(score_entries).append(total_score)
-    return JsonResponse(data, safe=False)
+    return render(request, 'library/user-side/check_score.html', context)
 
 
 def get_user_embedding(user):
@@ -412,5 +408,3 @@ def book_suggestion(request: HttpRequest):
     context = {'books': books}
 
     return render(request, 'library/user-side/book_suggestion.html', context)
-
-
