@@ -5,11 +5,12 @@ from .views import (import_pdf_file, dashboard, undo_loan,
                     UserLoginView, admin_see_requests, book_suggestion,
                     admin_dashboard, see_borrowed_books,
                     see_requests, successful, create_request,
-                    accepte_request, reject_request, 
-                    see_score, check_score, user_score
+                    accepte_request, reject_request,
+                    see_score, check_score, user_score,
+                    chat,
                     )
 
-urlpatterns = [  # Todo: create another path for the admin side
+urlpatterns = [  # TODO: create another path for the admin side
     path("account/login/", views.LoginView.as_view(), name="admin_login"),
     path('admin/import_file/', import_pdf_file, name='import_excle_file'),
     path('admin/dashboard/', admin_dashboard, name='admin_dashboard'),
@@ -24,6 +25,7 @@ urlpatterns = [  # Todo: create another path for the admin side
     path('admin/see_requests/', admin_see_requests, name='admin_see_requests'),
     path('admin/see_score/', see_score, name='see_score'),
     path('admin/user_score/<int:joined_number>/', user_score, name='user_score'),
+    path('admin/chat', chat, name='chat'),
     # user side
     path('login/', UserLoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
