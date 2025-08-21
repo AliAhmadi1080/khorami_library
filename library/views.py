@@ -301,6 +301,12 @@ def reject_request(request: HttpRequest, request_id: int):
     return redirect('successful')
 
 
+@superuser_required
+def chat(request: HttpRequest):
+    context = {}
+    return render(request, 'library/admin/chat.html', context)
+
+
 class UserLoginView(LoginView):
     template_name = 'library/user-side/login.html'
     redirect_authenticated_user = 'dashboard'
