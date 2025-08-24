@@ -18,5 +18,5 @@ urlpatterns = [
     path('see_score/', see_score, name='see_score'),
     path('user_score/<int:joined_number>/', user_score, name='user_score'),
     path('chat', chat, name='chat'),
-
+    path('chat/api', chat_api, name='chat_api'),
 ]

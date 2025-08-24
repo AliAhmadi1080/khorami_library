@@ -1,4 +1,7 @@
+from django.http.response import (HttpResponseNotAllowed,
+                                  JsonResponse, HttpResponseBadRequest)
 from django.shortcuts import get_object_or_404, render, redirect
+from django.views.decorators.csrf import csrf_exempt
 from library.forms import LoanForm, BookSearchForm
 from account.models import CustomUser, ScoreEntry
 from django.core.management import call_command
@@ -8,9 +11,9 @@ from account.forms import CustomUserForm
 from datetime import timedelta, datetime
 from django.db.models import Q
 from jdatetime import date
+from json import loads
 from .utils import *
 import threading
-
 
 @superuser_required
 def import_pdf_file(request: HttpRequest):
@@ -230,4 +233,22 @@ def reject_request(request: HttpRequest, request_id: int):
 def chat(request: HttpRequest):
     context = {}
     return render(request, 'library/admin/chat.html', context)
+
+@csrf_exempt
+@superuser_required
+def chat_api(request: HttpRequest):
+    if request.method == 'POST':
+        post = loads(request.body.decode())
+        try:
+            history = post['history']  # لیست پیام‌های user و assistant
+        except:
+            return HttpResponseBadRequest('send history in json')
+
+        # حالا باید get_ai_response بتونه history رو هندل کنه
+        response = get_ai_response(history)
+
+        return JsonResponse({'response': response})
+    else:
+        return HttpResponseNotAllowed(['POST', 'OPTION'])
+
 
