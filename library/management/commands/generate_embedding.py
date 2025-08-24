@@ -20,7 +20,6 @@ def get_batch_embeddings(texts, model="text-embedding-3-small"):
         )
         return [item.embedding for item in response.data]
     except Exception as e:
-        print(f"خطا برای batch: {e}")
         return [None] * len(texts)
 
 BATCH_SIZE = 20
