@@ -5,19 +5,23 @@
 ## ویژگی‌ها
 
 - **مدیریت کاربران**:
+
   - مدل کاربر سفارشی با فیلدهایی مانند fullname، classname، joined_number و username.
   - فرم و نمای ایجاد کاربر.
 
 - **مدیریت کتاب‌ها**:
+
   - مدل کتاب با فیلدهایی مانند name، code و row_number.
   - فرم و نمای جستجوی کتاب.
 
 - **مدیریت امانت‌ها**:
+
   - مدل امانت با فیلدهایی مانند book، user، loan_date، return_date، is_return و notes.
   - فرم و نمای ایجاد امانت.
   - نمای بازگرداندن امانت.
 
 - **وارد کردن PDF**:
+
   - تابعی برای مدیریت فایل‌های PDF آپلود شده و استخراج داده‌های کتاب.
   - نمای وارد کردن فایل‌های اکسل.
 
@@ -27,36 +31,42 @@
 ## نصب
 
 1. مخزن را کلون کنید:
-    ```sh
-    git clone https://github.com/AliAhmadi1080/khorami_library
-    cd khorami_library
-    ```
+
+   ```sh
+   git clone https://github.com/AliAhmadi1080/khorami_library
+   cd khorami_library
+   ```
 
 2. یک محیط مجازی ایجاد و فعال کنید:
-    ```sh
-    python -m venv venv
-    source venv/bin/activate  # در ویندوز از `venv\Scripts\activate` استفاده کنید
-    ```
+
+   ```sh
+   python -m venv venv
+   source venv/bin/activate  # در ویندوز از `venv\Scripts\activate` استفاده کنید
+   ```
 
 3. وابستگی‌ها را نصب کنید:
-    ```sh
-    pip install -r requirements.txt
-    ```
+
+   ```sh
+   pip install -r requirements.txt
+   ```
 
 4. مهاجرت‌ها را اعمال کنید:
-    ```sh
-    python manage.py migrate
-    ```
+
+   ```sh
+   python manage.py migrate
+   ```
 
 5. یک کاربر ابر ایجاد کنید:
-    ```sh
-    python manage.py createsuperuser
-    ```
+
+   ```sh
+   python manage.py createsuperuser
+   ```
 
 6. سرور توسعه را اجرا کنید:
-    ```sh
-    python manage.py runserver
-    ```
+
+   ```sh
+   python manage.py runserver
+   ```
 
 7. به برنامه در [http://127.0.0.1:8000/](http://127.0.0.1:8000/) دسترسی پیدا کنید.
 

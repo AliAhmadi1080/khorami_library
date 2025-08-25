@@ -1,81 +1,99 @@
 # Library Management System
 
-This is a Django-based library management system for managing books, users, and loans in a school library.
+A Django-based library management system for managing books, users, and loans in a school library. The system provides both admin and user interfaces with features for managing the complete lifecycle of library operations.
 
 ## Features
 
-- **User Management**:
+### Admin Features
+- **User Management**
+  - Create and manage user accounts with custom fields (fullname, class, member number)
+  - Track user scores and history
+  - View user statistics and borrowing patterns
 
-  - Custom user model with fields like fullname, classname, joined_number, and username.
-  - User creation form and view.
+- **Book Management** 
+  - Import books from PDF catalog files
+  - Search and browse book inventory
+  - Track book status and availability
+  - View popular books statistics
 
-- **Book Management**:
+- **Loan Management**
+  - Issue books to users
+  - Process loan extensions and returns
+  - Track overdue books
+  - Manage loan requests
 
-  - Book model with fields like name, code, and row_number.
-  - Book search form and view.
+- **Dashboard**
+  - Visual statistics for loans and returns
+  - Overdue book monitoring
+  - User activity tracking
+  
+- **AI Assistant**
+  - Chat interface for quick information lookup
+  - Smart recommendations based on user history
+  - Natural language queries for library data
 
-- **Loan Management**:
+### User Features
+- **Personal Dashboard**
+  - View borrowed books
+  - Track return dates
+  - Check personal score
+  - Request loan extensions
 
-  - Loan model with fields like book, user, loan_date, return_date, is_return, and notes.
-  - Loan creation form and view.
-  - Loan undo view.
-
-- **PDF Import**:
-
-  - Function to handle uploaded PDF files and extract book data.
-  - View to import Excel files.
-
-- **Dashboard**:
-  - Dashboard view displaying loan statistics.
+- **Book Discovery**
+  - Search available books
+  - Get personalized book recommendations
+  - View borrowing history
 
 ## Installation
 
 1. Clone the repository:
-    ```sh
-    git clone https://github.com/AliAhmadi1080/khorami_library
-    cd khorami_library
-    ```
+```sh
+git clone https://github.com/AliAhmadi1080/khorami_library
+cd khorami_library
+```
 
-2. Create and activate a virtual environment:
-    ```sh
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    ```
+2. Create and activate virtual environment:
+```sh
+python -m venv venv
+source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+```
 
-3. Install the dependencies:
-    ```sh
-    pip install -r requirements.txt
-    ```
+3. Install dependencies:
+```sh
+pip install -r requirements.txt
+```
 
-4. Apply migrations:
-    ```sh
-    python manage.py migrate
-    ```
+4. Configure environment variables:
+- Create `.env` file with required settings
+- Set `SECRET_KEY` and other environment variables
 
-5. Create a superuser:
-    ```sh
-    python manage.py createsuperuser
-    ```
+5. Setup database:
+```sh
+python manage.py migrate
+```
 
-6. Run the development server:
-    ```sh
-    python manage.py runserver
-    ```
+6. Create admin user:
+```sh
+python manage.py createsuperuser
+```
 
-7. Access the application at [http://127.0.0.1:8000/](http://127.0.0.1:8000/).
+7. Run development server:
+```sh
+python manage.py runserver
+```
 
-## Usage
+The application will be available at http://127.0.0.1:8000/
 
-- **Login**: Access the login page at `/account/login/`.
-- **Dashboard**: Access the dashboard at `/dashbord/`.
-- **Create User**: Create a new user at `/create_user/`.
-- **Create Loan**: Create a new loan at `/create_loan/`.
-- **Search Books**: Search for books at `/search_books/`.
-- **Import PDF File**: Import book data from a PDF file at `/import_file/`.
+## Tech Stack
+- Django
+- SQLite
+- Tailwind CSS
+- Chart.js
+- OpenAI API (for AI features)
+- PDF Plumber (for PDF processing)
 
-# TODO
-- use stronger password generator 
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
-
-This project is licensed under the GNU General Public License v3.0.
+GNU General Public License
