@@ -1,19 +1,22 @@
+from library.management.commands.generate_embedding import get_batch_embeddings
 from django.contrib.auth.decorators import user_passes_test
+from sklearn.metrics.pairwise import cosine_similarity
 from django.core.management import call_command
 from account.models import CustomUser
-from library.models import Book,Loan
+from library.models import Book, Loan
 from django.db.models import Count
 from django.conf import settings
 from datetime import datetime
 from openai import OpenAI
 from os import environ
 import pandas as pd
+import numpy as np
 import pdfplumber
 import json
 
 token = environ.get('GITHUB_TOKEN')
-endpoint = "https://api.groq.com/openai/v1"
-model = "openai/gpt-oss-20b"
+endpoint = "https://models.github.ai/inference"
+model = "openai/gpt-4.1-mini"
 
 client = OpenAI(
     base_url=endpoint,
@@ -27,7 +30,8 @@ def getUserInfo(joined_number: int):
         return 'کاربر مورد نظر شما پیدا نشد.'
 
     loans = Loan.objects.filter(user=user)
-    current_loans = [{"book_name": loan.book.name, "loan_date": loan.date} for loan in loans]
+    current_loans = [{"book_name": loan.book.name,
+                      "loan_date": loan.date} for loan in loans]
 
     return {
         "joined_number": joined_number,
@@ -36,15 +40,18 @@ def getUserInfo(joined_number: int):
         "total_loans": loans.count()
     }
 
+
 def getMostPopularBooks(limit: int = 5):
     books_with_loans = Book.objects.annotate(
-    loan_count=Count('loan')  
-).order_by('-loan_count')[:limit]
+        loan_count=Count('loan')
+    ).order_by('-loan_count')[:limit]
     books_with_popularity = [
-        {"name": book.name, "code": book.code, "popularity": Loan.objects.filter(book=book).count()}
+        {"name": book.name, "code": book.code,
+            "popularity": Loan.objects.filter(book=book).count()}
         for book in books_with_loans
     ]
     return books_with_popularity
+
 
 def getLibraryGeneralInfo():
     total_members = CustomUser.objects.count()
@@ -56,6 +63,7 @@ def getLibraryGeneralInfo():
         "total_books": total_books,
         "total_loans": total_loans,
     }
+
 
 def getOverdueLoans():
     today_date = datetime.now()
@@ -74,28 +82,30 @@ def getOverdueLoans():
 def get_book_general_info(name: str = None, code: str = None):
     if name is None and code is None:
         return 'کتابی با این مشخصات پیدا نشد'
+    embbeding = get_batch_embeddings(name)
+    all_book = Book.objects.all()
+    similarities = []
+    for book in all_book:
+        book_vector = np.array(book.embedding)
+        try:
+            sim = cosine_similarity(embbeding, [book_vector])
+        except:
+            pass
+        similarities.append((book.id, sim))
 
-    books = Book.objects.all()
-    if name:
-        books = books.filter(name__icontains=name)
-    if code:
-        books = books.filter(code__icontains=code)
+    similarities.sort(key=lambda x: x[1], reverse=True)
+    book = (Book.objects.get(id=similarities[0][0]))
+    book.popularity = Loan.objects.filter(book=book).count()
 
-    if not books.exists():
-        return 'کتابی پیدا نشد'
-
-    for book in books:
-        book.popularity = Loan.objects.filter(book=book).count()
-
-    return {'نام کتاب':books[0].name, "میزان محبوبیت":books[0].popularity, "کد کتاب":books[0].code}
-
+    return {'نام کتاب': book.title, "میزان محبوبیت": book.popularity, "کد کتاب": book.code,
+            "نویسنده": book.author, "ناشر": book.publisher, "سال نشر": book.year}
 
 
 def get_ai_response(history: list[dict]):
-    # مرحله اول: مدل رو صدا می‌زنیم
     response = client.chat.completions.create(
         model=model,
-        messages=[{"role": "system", "content": settings.AI_SYSTEM_PROMPT}, *history],
+        messages=[
+            {"role": "system", "content": settings.ADMIN_AI_SYSTEM_PROMPT}, *history],
         temperature=1.0,
         top_p=1.0,
         tools=settings.TOOLS,
@@ -107,7 +117,7 @@ def get_ai_response(history: list[dict]):
         return response.choices[0].message.content
     for tool_call in message.tool_calls:
         args = json.loads(tool_call.function.arguments)
-        
+
         if tool_call.function.name == "get_book_general_info":
             result = get_book_general_info(**args)
         elif tool_call.function.name == "getLibraryGeneralInfo":
@@ -128,10 +138,11 @@ def get_ai_response(history: list[dict]):
         final_response = client.chat.completions.create(
             model=model,
             messages=[
-                {"role": "system", "content": settings.AI_SYSTEM_PROMPT},
+                {"role": "system", "content": settings.ADMIN_AI_SYSTEM_PROMPT},
                 *history,
                 message,
-                {"role": "tool", "tool_call_id": tool_call.id, "content": str(result)},
+                {"role": "tool", "tool_call_id": tool_call.id,
+                    "content": str(result)},
             ],
         )
 
@@ -139,6 +150,8 @@ def get_ai_response(history: list[dict]):
 
     # اگر ابزار لازم نبود
     return message.content
+
+
 def superuser_required(function=None, redirect_field_name='next', login_url='/account/login/'):
     """
     Decorator for views that checks that the user is a superuser, redirecting

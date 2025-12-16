@@ -24,8 +24,8 @@ def import_pdf_file(request: HttpRequest):
             t1 = threading.Thread(target=handle_uploaded_file, args=(file,))
             t1.start()
             context['succses'] = True
-            call_command('generate_embedding')
             call_command('get_book_info')
+            call_command('generate_embedding')
         except:
             pass
 
@@ -37,8 +37,6 @@ def import_pdf_file(request: HttpRequest):
                 name=book_name, row_number=row_number, code=book_code)
             book.save()
             context['succses'] = True
-            call_command('generate_embedding')
-            call_command('get_book_info')
         except:
             pass
 

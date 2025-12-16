@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand
-from library.models import Book, BookEmbedding
+from library.models import Book
 from openai import OpenAI
 from tqdm import tqdm
 import os
@@ -28,12 +28,14 @@ class Command(BaseCommand):
     help = "generate 1-to-1 embedding for all Book objects (batch version)"
 
     def handle(self, *args, **options):
-        books = list(Book.objects.all().exclude(bookembedding__isnull=False))
+        books = list(Book.objects.all().filter(complited=True).filter(has_embedding=False))
         for i in tqdm(range(0, len(books), BATCH_SIZE)):
             batch_books = books[i:i+BATCH_SIZE]
-            names = [book.name for book in batch_books]
+            names = [book.generate_search_text() for book in batch_books]
             embeddings = get_batch_embeddings(names)
 
             for book, vector in zip(batch_books, embeddings):
                 if vector:
-                    BookEmbedding.objects.create(book=book, vector=vector)
+                    book.embedding = vector
+                    book.has_embedding = True
+                    book.save()
