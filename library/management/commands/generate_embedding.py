@@ -1,8 +1,8 @@
 from django.core.management.base import BaseCommand
 from library.models import Book, BookEmbedding
 from openai import OpenAI
-import os
 from tqdm import tqdm
+import os
 
 token = os.environ.get('GITHUB_TOKEN')
 endpoint = "https://models.github.ai/inference"

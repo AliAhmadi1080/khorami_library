@@ -7,6 +7,12 @@ class Book(models.Model):
     name = models.CharField('اسم', max_length=255, null=True)
     code = models.CharField('کد', max_length=255, null=True)
     row_number = models.PositiveBigIntegerField('ردیف', null=True)
+    title = models.CharField('نام', max_length=255, null=True)
+    author = models.CharField('نویسنده', max_length=255, null=True)
+    publisher = models.CharField('ناشر', max_length=255, null=True)
+    year = models.PositiveIntegerField('سال نشر', null=True)
+    notes = models.CharField('متفرقه', max_length=255, null=True)
+    complited = models.BooleanField('کامل شده؟', default=False)
 
     def __str__(self) -> str:
         return f'{self.name}--{self.code}'

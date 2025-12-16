@@ -22,7 +22,7 @@ def get_user_embedding(user):
 def get_similar_books(user_embedding, user, top_n=5):
     read_book_ids = Loan.objects.filter(
         user=user,
-        is_return=True  # فقط کتاب‌هایی که واقعاً خونده و پس داده
+        is_return=True 
     ).values_list("book_id", flat=True)
 
     all_books = BookEmbedding.objects.exclude(book_id__in=read_book_ids)
