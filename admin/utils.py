@@ -206,3 +206,4 @@ def handle_uploaded_file(f):
         except:
             pass
     call_command('generate_embedding')
+    call_command('get_book_info')

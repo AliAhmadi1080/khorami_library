@@ -144,7 +144,7 @@ LOGOUT_REDIRECT_URL = "/"
 FILE_UPLOAD_MAX_MEMORY_SIZE = 5242880  # حداکثر حجم آپلود (5 مگابایت)
 DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # حداکثر داده‌های آپلود (10 مگابایت)
 
-AI_SYSTEM_PROMPT = """
+ADMIN_AI_SYSTEM_PROMPT = """
 🚀 دستیار هوشمند مدیریت کتابخانه
 شما یک دستیار هوشمند و یکپارچه برای کمک به مدیریت و نگهداری کتابخانه هستید. وظیفه اصلی شما ارائه پاسخ‌های دقیق، سریع و کارآمد به پرسش‌های مربوط به کتاب‌ها، اعضا و آمار کلی کتابخانه است.
 برای انجام وظایف خود، به مجموعه ابزارهای زیر دسترسی دارید.
@@ -183,7 +183,63 @@ getOverdueLoans()
 "در رتبه اول محبوب‌ترین کتاب‌ها، «قصه‌های مجید» با ۴ امانت قرار دارد. پس از آن در رتبه دوم کتاب «شما که غریبه نیستید» با ۰ امانت و در رتبه سوم..."
 """
 
+BOOK_INFO_SYSTEM_PROMPT = """
+You are a highly accurate data extraction assistant specialized in parsing bibliographic information in Persian text.
+Your task is to identify and separate the following fields from each record about a book:
 
+Fields to extract:
+- id: the id of book
+- title: the book title
+- author: the author name
+- publisher: the publisher name
+- year: the publication year (in Persian digits or Arabic digits)
+- notes: any extra information not included in the other fields (like edition info, copy count, or parentheses content)
+
+Guidelines:
+- Always return the output as a **valid JSON array**.
+- Each record must be an object with all six fields, even if some are null.
+- Normalize Persian punctuation marks (for example, treat both "،" and "," as commas).
+- Ignore extra spaces, dots, and parentheses that don't belong to the main data.
+- If a record contains additional text (e.g., "(دو نسخه)"), include it in the `notes` field.
+- If the year cannot be found, set `"year": null`.
+- Do **not** add explanations, comments, or text outside of the JSON.
+- Do **not** change id of book
+
+Example input:
+[
+  "قصههای مجید، هوشنگ مرادی کرمانی، تهران: معین، 1381.id=1",
+  "در رنج آفریدیم، مهرداد همتیار، اصفهان: فرهنگ مردم، 1397.id=2",
+  "نه تر و نه خشک، هوشنگ مرادی کرمانی، تهران: معین، 1382.(دو نسخه).id=3"
+]
+
+Expected output:
+[
+  {
+    "id":1,
+    "title": "قصه‌های مجید",
+    "author": "هوشنگ مرادی کرمانی",
+    "publisher": "معین",
+    "year": "1381",
+    "notes": null
+  },
+  {
+    "id":2,
+    "title": "در رنج آفریدیم",
+    "author": "مهرداد همتیار",
+    "publisher": "فرهنگ مردم",
+    "year": "1397",
+    "notes": null
+  },
+  {
+    "id":3,
+    "title": "نه تر و نه خشک",
+    "author": "هوشنگ مرادی کرمانی",
+    "publisher": "معین",
+    "year": "1382",
+    "notes": "دو نسخه"
+  }
+]
+"""
 
 TOOLS = [
     {
@@ -203,7 +259,7 @@ TOOLS = [
                         "description": "کد کتاب (اختیاری)"
                     }
                 },
-                "required": []  # هیچکدام اجباری نیست
+                "required": [] 
             },
         },
 

@@ -25,6 +25,7 @@ def import_pdf_file(request: HttpRequest):
             t1.start()
             context['succses'] = True
             call_command('generate_embedding')
+            call_command('get_book_info')
         except:
             pass
 
@@ -37,6 +38,7 @@ def import_pdf_file(request: HttpRequest):
             book.save()
             context['succses'] = True
             call_command('generate_embedding')
+            call_command('get_book_info')
         except:
             pass
 
