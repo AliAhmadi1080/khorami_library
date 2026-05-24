@@ -148,17 +148,15 @@ def search_books(request: HttpRequest):
     if form.is_valid():
         name = form.cleaned_data.get('name')
         code = form.cleaned_data.get('code')
-        user = request.user
         is_return = form.cleaned_data.get('is_return')
         results = Loan.objects.select_related('book', 'user')
-        if name:
+        if name.strip():
             results = results.filter(book__name__contains=name)
-        if code:
+        if code.strip():
             results = results.filter(book__code__contains=code)
-        if user:
-            results = results.filter(user__username__contains=user)
         if is_return is not None:
             results = results.filter(is_return=is_return)
+
         context['is_return'] = is_return
         context['results'] = results
     return render(request, 'library/admin/search_books.html', context)
